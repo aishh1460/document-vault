@@ -6,6 +6,7 @@ import Loader from '../components/common/Loader';
 import EmptyState from '../components/common/EmptyState';
 import * as reminderService from '../services/reminderService';
 import * as documentService from '../services/documentService';
+import './Reminders.css';
 
 const Reminders = () => {
   const { currentUser } = useAuth();
@@ -15,7 +16,6 @@ const Reminders = () => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Form state
   const [selectedDocId, setSelectedDocId] = useState('');
   const [message, setMessage] = useState('');
   const [remindDays, setRemindDays] = useState('7');
@@ -30,52 +30,117 @@ const Reminders = () => {
 
   const loadData = async () => {
     setLoading(true);
+
     try {
       const [remRes, docRes] = await Promise.all([
         reminderService.getRemindersByUser(currentUser.userId),
-        documentService.getDocuments({ ownerId: currentUser.userId }),
+        documentService.getDocuments({
+          ownerId: currentUser.userId,
+        }),
       ]);
-      setReminders(remRes.data || []);
-      const docList = docRes.data?.content || (Array.isArray(docRes.data) ? docRes.data : []);
+
+      const reminderList = Array.isArray(remRes.data)
+        ? remRes.data
+        : remRes.data?.content || [];
+
+      const docList = Array.isArray(docRes.data)
+        ? docRes.data
+        : docRes.data?.content || [];
+
+      setReminders(reminderList);
       setDocuments(docList);
-    } catch (e) {
+    } catch (error) {
+      console.error('Reminder loading error:', error);
       toastError('Could not load reminders');
     } finally {
       setLoading(false);
     }
   };
 
+  const getDocumentName = (reminder) => {
+    if (
+      reminder.documentName &&
+      reminder.documentName !== 'string'
+    ) {
+      return reminder.documentName;
+    }
+
+    if (!reminder.documentId) {
+      return null;
+    }
+
+    const document = documents.find(
+      (doc) =>
+        Number(doc.id) === Number(reminder.documentId)
+    );
+
+    if (!document) {
+      return null;
+    }
+
+    return (
+      document.documentTitle ||
+      document.originalFileName ||
+      document.fileName ||
+      `Document #${document.id}`
+    );
+  };
+
   const handleCreateReminder = async (e) => {
     e.preventDefault();
+
     if (!message.trim()) {
       toastError('Please enter a reminder description');
       return;
     }
 
     let targetDateStr;
+
     if (customDate) {
-      targetDateStr = new Date(customDate).toISOString();
+      const selectedDate = new Date(
+        `${customDate}T00:00:00`
+      );
+
+      targetDateStr = selectedDate.toISOString();
     } else {
-      const d = new Date();
-      d.setDate(d.getDate() + Number(remindDays));
-      targetDateStr = d.toISOString();
+      const date = new Date();
+
+      date.setDate(
+        date.getDate() + Number(remindDays)
+      );
+
+      targetDateStr = date.toISOString();
     }
 
     setCreating(true);
+
     try {
       await reminderService.createReminder(
         currentUser.userId,
-        selectedDocId ? Number(selectedDocId) : null,
+        selectedDocId
+          ? Number(selectedDocId)
+          : null,
         message.trim(),
         targetDateStr
       );
+
       success('Reminder scheduled successfully');
+
       setMessage('');
       setSelectedDocId('');
       setCustomDate('');
-      loadData();
-    } catch (err) {
-      toastError('Failed to create reminder');
+
+      await loadData();
+    } catch (error) {
+      console.error(
+        'Create reminder error:',
+        error
+      );
+
+      toastError(
+        error.response?.data?.message ||
+        'Failed to create reminder'
+      );
     } finally {
       setCreating(false);
     }
@@ -84,162 +149,460 @@ const Reminders = () => {
   const handleDismiss = async (id) => {
     try {
       await reminderService.dismissReminder(id);
-      setReminders((prev) => prev.filter((r) => r.id !== id));
+
+      setReminders((previous) =>
+        previous.filter(
+          (reminder) =>
+            reminder.id !== id
+        )
+      );
+
       success('Reminder dismissed');
-    } catch (err) {
-      toastError('Failed to dismiss reminder');
+    } catch (error) {
+      console.error(
+        'Dismiss reminder error:',
+        error
+      );
+
+      toastError(
+        'Failed to dismiss reminder'
+      );
     }
   };
 
+  const formatDate = (date) => {
+    if (!date) {
+      return 'Upcoming';
+    }
+
+    const parsedDate = new Date(date);
+
+    if (Number.isNaN(parsedDate.getTime())) {
+      return 'Upcoming';
+    }
+
+    return parsedDate.toLocaleDateString(
+      'en-US',
+      {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }
+    );
+  };
+
+  const getDaysRemaining = (date) => {
+    if (!date) {
+      return null;
+    }
+
+    const today = new Date();
+    const target = new Date(date);
+
+    today.setHours(0, 0, 0, 0);
+    target.setHours(0, 0, 0, 0);
+
+    const difference =
+      target.getTime() -
+      today.getTime();
+
+    return Math.ceil(
+      difference /
+      (1000 * 60 * 60 * 24)
+    );
+  };
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      <div>
-        <h2 style={{ margin: '0 0 4px 0', fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-          ⏰ Document Reminders & Expirations
-        </h2>
-        <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          Set proactive expiration warnings for Passports, Insurance, Contracts, and Certificates
-        </p>
+    <div className="reminders-page">
+
+      <div className="reminders-header">
+
+        <div>
+          <div className="reminders-eyebrow">
+            MONITOR
+          </div>
+
+          <h2 className="reminders-title">
+            Document Reminders & Expirations
+          </h2>
+
+          <p className="reminders-subtitle">
+            Stay ahead of important expiration dates
+            and never miss a renewal.
+          </p>
+        </div>
+
+        <div className="reminders-count">
+          {reminders.length}
+        </div>
+
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px' }}>
-        {/* Active Reminders List */}
-        <div>
-          <h3 style={{ margin: '0 0 12px 0', fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-            Active Reminders ({reminders.length})
-          </h3>
+      <div className="reminders-layout">
+
+        <section className="active-reminders-section">
+
+          <div className="section-heading">
+
+            <div>
+              <span className="section-eyebrow">
+                MONITOR
+              </span>
+
+              <h3>
+                Active Reminders
+              </h3>
+            </div>
+
+          </div>
 
           {loading ? (
+
             <Loader text="Loading reminders..." />
+
           ) : reminders.length === 0 ? (
+
             <EmptyState
               icon="⏰"
               title="No active reminders"
-              description="Schedule a reminder on the right to receive timely expiration warnings."
+              description="Schedule a reminder to receive timely expiration warnings."
             />
+
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {reminders.map((rem) => (
-                <div
-                  key={rem.id}
-                  className="glass-card"
-                  style={{
-                    padding: '1rem',
-                    borderRadius: '12px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    borderLeft: '4px solid #fbbf24',
-                  }}
-                >
-                  <div>
-                    <h4 style={{ margin: '0 0 4px 0', fontSize: '0.95rem', color: 'var(--text-primary)' }}>
-                      {rem.message}
-                    </h4>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      Due Date:{' '}
-                      <strong>
-                        {rem.reminderDate ? new Date(rem.reminderDate).toLocaleDateString() : 'Upcoming'}
-                      </strong>
-                    </span>
+
+            <div className="reminders-list">
+
+              {reminders.map((reminder) => {
+
+                const documentName =
+                  getDocumentName(reminder);
+
+                const daysRemaining =
+                  getDaysRemaining(
+                    reminder.reminderDate
+                  );
+
+                return (
+
+                  <div
+                    key={reminder.id}
+                    className="reminder-card"
+                  >
+
+                    <div className="reminder-icon">
+                      ⏰
+                    </div>
+
+                    <div className="reminder-info">
+
+                      <div className="reminder-message">
+                        {reminder.description ||
+                          reminder.message ||
+                          'Reminder'}
+                      </div>
+
+                      {documentName && (
+
+                        <div className="reminder-document">
+
+                          <span className="document-icon">
+                            📄
+                          </span>
+
+                          <span>
+                            {documentName}
+                          </span>
+
+                        </div>
+
+                      )}
+
+                      <div className="reminder-meta">
+
+                        <span>
+                          Due{' '}
+                          {formatDate(
+                            reminder.reminderDate
+                          )}
+                        </span>
+
+                        {daysRemaining !== null && (
+
+                          <span
+                            className={
+                              daysRemaining <= 0
+                                ? 'days-danger'
+                                : daysRemaining <= 7
+                                ? 'days-warning'
+                                : 'days-normal'
+                            }
+                          >
+                            {daysRemaining < 0
+                              ? `${Math.abs(
+                                  daysRemaining
+                                )} days overdue`
+                              : daysRemaining === 0
+                              ? 'Due today'
+                              : daysRemaining === 1
+                              ? '1 day remaining'
+                              : `${daysRemaining} days remaining`}
+                          </span>
+
+                        )}
+
+                      </div>
+
+                    </div>
+
+                    <button
+                      className="reminder-dismiss"
+                      onClick={() =>
+                        handleDismiss(
+                          reminder.id
+                        )
+                      }
+                    >
+                      Dismiss
+                    </button>
+
                   </div>
 
-                  <button
-                    className="btn btn-secondary"
-                    style={{ padding: '4px 10px', fontSize: '0.8rem' }}
-                    onClick={() => handleDismiss(rem.id)}
-                  >
-                    Dismiss
-                  </button>
-                </div>
-              ))}
+                );
+              })}
+
             </div>
+
           )}
-        </div>
 
-        {/* Schedule Form */}
-        <div className="glass-card" style={{ padding: '1.5rem', borderRadius: '16px', height: 'fit-content' }}>
-          <h3 style={{ margin: '0 0 14px 0', fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-            Schedule New Reminder
-          </h3>
+        </section>
 
-          <form onSubmit={handleCreateReminder} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <section className="schedule-card">
+
+          <div className="schedule-card-header">
+
+            <div className="schedule-icon">
+              ⏰
+            </div>
+
+            <div>
+
+              <span className="section-eyebrow">
+                SCHEDULE
+              </span>
+
+              <h3>
+                New Reminder
+              </h3>
+
+            </div>
+
+          </div>
+
+          <form
+            className="reminder-form"
+            onSubmit={handleCreateReminder}
+          >
+
             <div className="form-group">
-              <label className="form-label" style={{ display: 'block', marginBottom: '4px', fontSize: '0.85rem' }}>
-                Select Document (Optional)
+
+              <label className="form-label">
+                Select Document
+
+                <span className="optional">
+                  Optional
+                </span>
               </label>
+
               <select
                 className="form-input"
                 value={selectedDocId}
-                onChange={(e) => setSelectedDocId(e.target.value)}
-                style={{ width: '100%' }}
+                onChange={(e) =>
+                  setSelectedDocId(
+                    e.target.value
+                  )
+                }
               >
-                <option value="">(No specific document)</option>
-                {documents.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    📄 {d.documentTitle || d.originalFileName || d.fileName}
+
+                <option value="">
+                  No specific document
+                </option>
+
+                {documents.map((document) => (
+
+                  <option
+                    key={document.id}
+                    value={document.id}
+                  >
+                    {document.documentTitle ||
+                      document.originalFileName ||
+                      document.fileName ||
+                      `Document #${document.id}`}
                   </option>
+
                 ))}
+
               </select>
+
             </div>
 
             <div className="form-group">
-              <label className="form-label" style={{ display: 'block', marginBottom: '4px', fontSize: '0.85rem' }}>
-                Reminder Note / Subject <span style={{ color: '#ef4444' }}>*</span>
+
+              <label className="form-label">
+
+                Reminder Note / Subject
+
+                <span className="required">
+                  *
+                </span>
+
               </label>
+
               <input
                 type="text"
                 className="form-input"
-                placeholder="e.g. Passport renewal required, Insurance expires"
+                placeholder="e.g. Passport renewal required"
                 value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={(e) =>
+                  setMessage(e.target.value)
+                }
                 required
-                style={{ width: '100%' }}
               />
+
             </div>
 
             <div className="form-group">
-              <label className="form-label" style={{ display: 'block', marginBottom: '4px', fontSize: '0.85rem' }}>
+
+              <label className="form-label">
                 Reminder Horizon
               </label>
+
               <select
                 className="form-input"
                 value={remindDays}
-                onChange={(e) => setRemindDays(e.target.value)}
-                style={{ width: '100%' }}
+                onChange={(e) =>
+                  setRemindDays(
+                    e.target.value
+                  )
+                }
               >
-                <option value="7">7 Days Ahead</option>
-                <option value="15">15 Days Ahead</option>
-                <option value="30">30 Days Ahead</option>
-                <option value="60">60 Days Ahead</option>
-                <option value="90">90 Days Ahead</option>
+
+                <option value="7">
+                  7 Days Ahead
+                </option>
+
+                <option value="15">
+                  15 Days Ahead
+                </option>
+
+                <option value="30">
+                  30 Days Ahead
+                </option>
+
+                <option value="60">
+                  60 Days Ahead
+                </option>
+
+                <option value="90">
+                  90 Days Ahead
+                </option>
+
               </select>
+
             </div>
 
             <div className="form-group">
-              <label className="form-label" style={{ display: 'block', marginBottom: '4px', fontSize: '0.85rem' }}>
-                Or Custom Expiration Date
+
+              <label className="form-label">
+                Custom Expiration Date
               </label>
-              <input
-                type="date"
-                className="form-input"
-                value={customDate}
-                onChange={(e) => setCustomDate(e.target.value)}
-                style={{ width: '100%' }}
-              />
+
+              <div className="calendar-input-wrapper">
+
+                <input
+                  type="date"
+                  className="form-input calendar-input"
+                  value={customDate}
+                  min={
+                    new Date()
+                      .toISOString()
+                      .split('T')[0]
+                  }
+                  onChange={(e) =>
+                    setCustomDate(
+                      e.target.value
+                    )
+                  }
+                />
+
+                <span
+                  className="calendar-icon"
+                  onClick={(e) => {
+
+                    const input =
+                      e.currentTarget
+                        .previousElementSibling;
+
+                    if (input?.showPicker) {
+                      input.showPicker();
+                    } else {
+                      input?.focus();
+                    }
+
+                  }}
+                >
+                  📅
+                </span>
+
+              </div>
+
+              {customDate && (
+
+                <div className="selected-date-preview">
+
+                  <span>
+                    Selected expiration:
+                  </span>
+
+                  <strong>
+                    {formatDate(
+                      `${customDate}T00:00:00`
+                    )}
+                  </strong>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setCustomDate('')
+                    }
+                  >
+                    Clear
+                  </button>
+
+                </div>
+
+              )}
+
             </div>
 
             <Button
               type="submit"
               variant="primary"
               loading={creating}
-              style={{ width: '100%', padding: '10px', marginTop: '6px' }}
+              style={{
+                width: '100%',
+                padding: '11px',
+                marginTop: '6px',
+              }}
             >
               Save Reminder Schedule
             </Button>
+
           </form>
-        </div>
+
+        </section>
+
       </div>
+
     </div>
   );
 };

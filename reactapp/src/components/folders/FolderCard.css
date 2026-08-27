@@ -1,0 +1,335 @@
+.vault-folder-card {
+  position: relative;
+  min-height: 285px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  border: 1px solid rgba(116, 132, 158, 0.18);
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(22, 29, 47, 0.96),
+      rgba(14, 21, 36, 0.97)
+    );
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.12);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+.vault-folder-card::before {
+  content: '';
+
+  position: absolute;
+
+  width: 230px;
+  height: 230px;
+
+  top: -120px;
+  right: -100px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(143, 227, 207, 0.07),
+      transparent 70%
+    );
+
+  pointer-events: none;
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.4s ease;
+}
+
+.vault-folder-card:hover {
+  transform: translateY(-6px);
+
+  border-color:
+    rgba(143, 227, 207, 0.28);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(25, 34, 53, 0.98),
+      rgba(16, 25, 41, 0.98)
+    );
+
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(143, 227, 207, 0.025);
+}
+
+.vault-folder-card:hover::before {
+  transform: scale(1.25);
+}
+
+.vault-folder-top {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vault-folder-label {
+  color:
+    rgba(247, 242, 232, 0.3);
+
+  font-size: 0.63rem;
+  font-weight: 700;
+
+  letter-spacing: 0.16em;
+}
+
+.vault-folder-index {
+  color:
+    rgba(143, 227, 207, 0.42);
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    monospace;
+
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.vault-folder-visual {
+  position: relative;
+  z-index: 2;
+
+  height: 120px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 10px;
+  margin-bottom: 8px;
+
+  transition:
+    transform 0.35s ease;
+}
+
+.vault-folder-card:hover .vault-folder-visual {
+  transform: translateY(-3px);
+}
+
+.folder-paper-item {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #566273;
+
+  font-size: 7px;
+  font-weight: 700;
+
+  letter-spacing: 0.1em;
+}
+
+.vault-folder-info {
+  position: relative;
+  z-index: 2;
+
+  flex: 1;
+}
+
+.vault-folder-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.vault-folder-name {
+  margin: 0;
+
+  color: #f7f2e8;
+
+  font-size: 1rem;
+  font-weight: 650;
+
+  letter-spacing: -0.02em;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vault-folder-count {
+  margin-top: 5px;
+
+  color: #718099;
+
+  font-size: 0.73rem;
+}
+
+.vault-folder-arrow {
+  width: 30px;
+  height: 30px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(143, 227, 207, 0.1);
+  border-radius: 9px;
+
+  background: rgba(143, 227, 207, 0.035);
+
+  color: #718b8a;
+
+  font-size: 0.95rem;
+
+  opacity: 0;
+
+  transform:
+    translateX(-5px);
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    color 0.25s ease,
+    background 0.25s ease;
+}
+
+.vault-folder-card:hover .vault-folder-arrow {
+  opacity: 1;
+
+  transform:
+    translateX(0);
+
+  color: #8fe3cf;
+
+  background:
+    rgba(143, 227, 207, 0.07);
+}
+
+.vault-folder-actions {
+  position: relative;
+  z-index: 3;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-top: 14px;
+  padding-top: 12px;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.07);
+}
+
+.vault-folder-action {
+  min-height: 32px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  border: 1px solid rgba(116, 132, 158, 0.15);
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  color: #78869b;
+
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 550;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.vault-folder-action.rename {
+  flex: 1;
+}
+
+.vault-folder-action.delete {
+  width: 34px;
+
+  color: #8d6870;
+
+  background:
+    rgba(239, 68, 68, 0.035);
+
+  border-color:
+    rgba(239, 68, 68, 0.12);
+}
+
+.vault-folder-action:hover {
+  transform: translateY(-1px);
+}
+
+.vault-folder-action.rename:hover {
+  color: #8fe3cf;
+
+  border-color:
+    rgba(143, 227, 207, 0.2);
+
+  background:
+    rgba(143, 227, 207, 0.055);
+}
+
+.vault-folder-action.delete:hover {
+  color: #f87171;
+
+  border-color:
+    rgba(248, 113, 113, 0.25);
+
+  background:
+    rgba(239, 68, 68, 0.08);
+}
+
+@media (max-width: 700px) {
+  .vault-folder-card {
+    min-height: 260px;
+  }
+
+  .vault-folder-visual {
+    height: 105px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vault-folder-card,
+  .vault-folder-card::before,
+  .vault-folder-visual,
+  .vault-folder-action,
+  .vault-folder-arrow {
+    transition: none;
+  }
+}

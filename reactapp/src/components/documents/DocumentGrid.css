@@ -1,0 +1,67 @@
+.document-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
+  gap: 15px;
+  width: 100%;
+}
+
+.document-grid-item {
+  min-width: 0;
+  animation: documentGridItemIn 0.4s ease-out both;
+}
+
+.document-grid-empty {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(16, 23, 39, 0.35);
+  text-align: center;
+}
+
+.document-grid-empty-icon {
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  border: 1px solid rgba(143, 227, 207, 0.15);
+  border-radius: 15px;
+  background: rgba(143, 227, 207, 0.07);
+  font-size: 1.7rem;
+}
+
+.document-grid-empty h3 {
+  margin: 0 0 7px;
+  color: #f7f2e8;
+  font-size: 1rem;
+}
+
+.document-grid-empty p {
+  margin: 0;
+  color: #6f7c92;
+  font-size: 0.8rem;
+}
+
+@keyframes documentGridItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 700px) {
+  .document-grid {
+    grid-template-columns: 1fr;
+  }
+}

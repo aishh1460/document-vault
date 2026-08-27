@@ -1,0 +1,344 @@
+/* =========================================================
+   DIGITAL DOCUMENT VAULT
+   REACT BITS STYLE LINE SIDEBAR
+   ========================================================= */
+
+.line-sidebar {
+
+  --sidebar-accent: #8FE3CF;
+  --sidebar-text: #8A8F9C;
+  --sidebar-marker: #444650;
+
+  --marker-length: 54px;
+  --marker-gap: 18px;
+
+  --item-gap: 8px;
+
+  --sidebar-font-size: 0.95rem;
+
+  --max-shift: 18px;
+
+  position: relative;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   LIST
+   ========================================================= */
+
+.line-sidebar-list {
+
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: var(--item-gap);
+
+  width: 100%;
+
+}
+
+
+/* =========================================================
+   ITEM
+   ========================================================= */
+
+.line-sidebar-item {
+
+  position: relative;
+
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+
+  cursor: pointer;
+
+  user-select: none;
+
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.line-sidebar-label {
+
+  position: relative;
+
+  z-index: 2;
+
+  margin-left:
+    calc(
+      var(--marker-length) +
+      var(--marker-gap)
+    );
+
+  font-size:
+    var(--sidebar-font-size);
+
+  line-height: 1;
+
+  font-weight: 500;
+
+  letter-spacing: -0.01em;
+
+  color:
+    color-mix(
+      in srgb,
+      var(--sidebar-accent)
+        calc(
+          var(--hover-strength, 0) * 100%
+        ),
+      var(--sidebar-text)
+    );
+
+  transform:
+    translateX(
+      calc(
+        var(--hover-strength, 0) *
+        var(--max-shift)
+      )
+    );
+
+  transition:
+    color 0.08s linear;
+
+}
+
+
+/* =========================================================
+   NUMBER
+   ========================================================= */
+
+.line-sidebar-index {
+
+  position: absolute;
+
+  z-index: 3;
+
+  left:
+    calc(
+      var(--marker-length) +
+      var(--marker-gap)
+    );
+
+  transform:
+    translateX(
+      calc(
+        var(--hover-strength, 0) *
+        var(--max-shift)
+      )
+    );
+
+  margin-left: -36px;
+
+  width: 27px;
+
+  text-align: right;
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    monospace;
+
+  font-size: 0.70rem;
+
+  font-weight: 600;
+
+  letter-spacing: 0.02em;
+
+  color:
+    color-mix(
+      in srgb,
+      var(--sidebar-accent)
+        calc(
+          var(--hover-strength, 0) *
+          100%
+        ),
+      #646773
+    );
+
+  opacity:
+    calc(
+      0.7 +
+      var(--hover-strength, 0) *
+      0.3
+    );
+
+}
+
+
+/* =========================================================
+   MARKER LINE
+   ========================================================= */
+
+.line-sidebar-marker {
+
+  position: absolute;
+
+  left: 0;
+
+  top: 50%;
+
+  width:
+    var(--marker-length);
+
+  height: 1px;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--sidebar-accent)
+        calc(
+          var(--hover-strength, 0) *
+          100%
+        ),
+      var(--sidebar-marker)
+    );
+
+  transform-origin: left center;
+
+  transform:
+    translateY(-50%)
+    scaleX(
+      calc(
+        0.45 +
+        var(--hover-strength, 0) *
+        0.55
+      )
+    );
+
+  opacity:
+    calc(
+      0.55 +
+      var(--hover-strength, 0) *
+      0.45
+    );
+
+}
+
+
+/* =========================================================
+   ACTIVE ITEM
+   ========================================================= */
+
+.line-sidebar-item-active
+.line-sidebar-label {
+
+  color: #F7F2E8;
+
+  font-weight: 650;
+
+}
+
+
+.line-sidebar-item-active
+.line-sidebar-index {
+
+  color:
+    var(--sidebar-accent);
+
+}
+
+
+/* =========================================================
+   ACTIVE MARKER
+   ========================================================= */
+
+.line-sidebar-item-active
+.line-sidebar-marker {
+
+  background:
+    var(--sidebar-accent);
+
+  box-shadow:
+    0 0 9px
+    rgba(143, 227, 207, 0.35);
+
+}
+
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+.line-sidebar-item:hover
+.line-sidebar-label {
+
+  color: #F7F2E8;
+
+}
+
+
+.line-sidebar-item:hover
+.line-sidebar-index {
+
+  color:
+    var(--sidebar-accent);
+
+}
+
+
+/* =========================================================
+   SUBTLE TICK BETWEEN ITEMS
+   ========================================================= */
+
+.line-sidebar-item:not(:last-child)::after {
+
+  content: '';
+
+  position: absolute;
+
+  left: 0;
+
+  top:
+    calc(
+      100% +
+      var(--item-gap) / 2
+    );
+
+  width: 22px;
+
+  height: 1px;
+
+  background:
+    rgba(255,255,255,0.08);
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+  .line-sidebar {
+
+    --marker-length: 35px;
+    --marker-gap: 12px;
+
+    --max-shift: 12px;
+
+  }
+
+  .line-sidebar-label {
+
+    font-size: 0.85rem;
+
+  }
+
+}

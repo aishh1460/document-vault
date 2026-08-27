@@ -1,0 +1,448 @@
+.landing-page {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(81, 128, 118, 0.18),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(65, 92, 130, 0.16),
+            transparent 35%
+        ),
+        #08100f;
+
+    color: #f7f2e8;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* -------------------------------- */
+/* Background decoration */
+/* -------------------------------- */
+
+.landing-glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(80px);
+    opacity: 0.4;
+}
+
+.landing-glow-one {
+    width: 350px;
+    height: 350px;
+    top: -150px;
+    left: -100px;
+    background: rgba(100, 210, 185, 0.15);
+}
+
+.landing-glow-two {
+    width: 400px;
+    height: 400px;
+    right: -180px;
+    bottom: -150px;
+    background: rgba(100, 140, 220, 0.12);
+}
+
+
+/* -------------------------------- */
+/* Navbar */
+/* -------------------------------- */
+
+.landing-navbar {
+    position: relative;
+    z-index: 10;
+
+    width: 100%;
+    padding: 28px 5vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+}
+
+.landing-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    cursor: pointer;
+}
+
+.landing-brand-icon {
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid rgba(143, 227, 207, 0.5);
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(143, 227, 207, 0.08);
+}
+
+.landing-brand-icon span {
+    font-size: 18px;
+    font-weight: 700;
+    color: #8fe3cf;
+}
+
+.landing-brand-name {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.landing-brand-subtitle {
+    margin-top: 2px;
+
+    font-size: 8px;
+    letter-spacing: 0.18em;
+
+    color: rgba(247, 242, 232, 0.45);
+}
+
+.landing-login-button {
+    padding: 11px 18px;
+
+    border: 1px solid rgba(247, 242, 232, 0.18);
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.04);
+    color: #f7f2e8;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease;
+}
+
+.landing-login-button:hover {
+    background: rgba(143, 227, 207, 0.1);
+    border-color: rgba(143, 227, 207, 0.4);
+    transform: translateY(-2px);
+}
+
+
+/* -------------------------------- */
+/* Hero */
+/* -------------------------------- */
+
+.landing-hero {
+    position: relative;
+    z-index: 2;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 40px 24px 80px;
+}
+
+.landing-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: 28px;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+
+    color: rgba(247, 242, 232, 0.48);
+}
+
+.eyebrow-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #8fe3cf;
+
+    box-shadow:
+        0 0 12px rgba(143, 227, 207, 0.8);
+}
+
+
+/* -------------------------------- */
+/* Main title */
+/* -------------------------------- */
+
+.landing-title {
+    max-width: 1100px;
+
+    line-height: 0.95;
+}
+
+.landing-title .fold-text {
+    vertical-align: middle;
+}
+
+.landing-title-accent {
+    color: #8fe3cf;
+}
+
+
+/* -------------------------------- */
+/* Description */
+/* -------------------------------- */
+
+.landing-description {
+    max-width: 570px;
+
+    margin: 32px auto 0;
+
+    font-size: 16px;
+    line-height: 1.7;
+
+    color: rgba(247, 242, 232, 0.58);
+}
+
+
+/* -------------------------------- */
+/* Buttons */
+/* -------------------------------- */
+
+.landing-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-top: 34px;
+}
+
+.landing-primary-button,
+.landing-secondary-button {
+    height: 50px;
+
+    padding: 0 24px;
+
+    border-radius: 999px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+.landing-primary-button {
+    border: none;
+
+    background: #8fe3cf;
+    color: #07100e;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.landing-primary-button:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 35px rgba(143, 227, 207, 0.2);
+}
+
+.landing-secondary-button {
+    border: 1px solid rgba(247, 242, 232, 0.2);
+
+    background: rgba(255, 255, 255, 0.035);
+
+    color: #f7f2e8;
+}
+
+.landing-secondary-button:hover {
+    transform: translateY(-3px);
+
+    background: rgba(255, 255, 255, 0.08);
+}
+
+
+/* -------------------------------- */
+/* Features */
+/* -------------------------------- */
+
+.landing-features {
+    display: flex;
+
+    margin-top: 65px;
+
+    border-top: 1px solid rgba(247, 242, 232, 0.08);
+    padding-top: 24px;
+
+    gap: 45px;
+}
+
+.landing-feature {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    text-align: left;
+}
+
+.feature-icon {
+    width: 34px;
+    height: 34px;
+
+    border-radius: 10px;
+
+    background: rgba(143, 227, 207, 0.07);
+
+    color: #8fe3cf;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 16px;
+}
+
+.landing-feature div:last-child {
+    display: flex;
+    flex-direction: column;
+}
+
+.landing-feature strong {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.landing-feature span {
+    margin-top: 3px;
+
+    font-size: 9px;
+
+    color: rgba(247, 242, 232, 0.4);
+}
+
+
+/* -------------------------------- */
+/* Footer */
+/* -------------------------------- */
+
+.landing-footer {
+    position: relative;
+    z-index: 5;
+
+    padding: 18px 5vw;
+
+    border-top: 1px solid rgba(247, 242, 232, 0.06);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    font-size: 8px;
+    letter-spacing: 0.16em;
+
+    color: rgba(247, 242, 232, 0.3);
+}
+
+.landing-footer > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.status-dot {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #8fe3cf;
+}
+
+
+/* -------------------------------- */
+/* Responsive */
+/* -------------------------------- */
+
+@media (max-width: 800px) {
+
+    .landing-navbar {
+        padding: 20px;
+    }
+
+    .landing-hero {
+        padding: 40px 20px 60px;
+    }
+
+    .landing-features {
+        flex-direction: column;
+
+        gap: 15px;
+
+        align-items: flex-start;
+    }
+
+    .landing-footer {
+        padding: 16px 20px;
+    }
+
+    .landing-footer > div:last-child {
+        display: none;
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    .landing-brand-subtitle {
+        display: none;
+    }
+
+    .landing-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .landing-primary-button,
+    .landing-secondary-button {
+        width: 100%;
+        max-width: 300px;
+
+        justify-content: center;
+    }
+
+    .landing-description {
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,338 @@
+.vault-document-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 245px;
+  overflow: hidden;
+  padding: 17px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  background: linear-gradient(145deg, rgba(20, 28, 46, 0.96), rgba(13, 20, 34, 0.96));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.13);
+  animation: documentCardIn 0.4s ease-out both;
+  transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
+}
+
+.vault-document-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(143, 227, 207, 0.65) !important;
+  background: linear-gradient(145deg, rgba(23, 34, 51, 0.98), rgba(14, 23, 38, 0.98));
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25), 0 0 24px rgba(143, 227, 207, 0.1);
+}
+
+.vault-document-card:focus {
+  outline: none;
+}
+
+.vault-document-card:focus-visible {
+  outline: 2px solid #8fe3cf;
+  outline-offset: 2px;
+}
+
+.vault-card-glow {
+  position: absolute;
+  top: -100px;
+  right: -90px;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(143, 227, 207, 0.09), transparent 68%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.vault-document-card:hover .vault-card-glow {
+  opacity: 1;
+}
+
+.vault-card-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.vault-file-info {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.vault-file-icon {
+  width: 43px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(143, 227, 207, 0.13);
+  border-radius: 9px;
+  background: rgba(143, 227, 207, 0.06);
+  box-shadow: inset 0 0 18px rgba(143, 227, 207, 0.025);
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.vault-document-card:hover .vault-file-icon {
+  transform: translateY(-2px);
+  border-color: rgba(143, 227, 207, 0.3);
+  background: rgba(143, 227, 207, 0.09);
+}
+
+.vault-file-icon span {
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.vault-file-category {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.vault-version {
+  color: #66738a;
+  font-size: 0.68rem;
+}
+
+.vault-favorite {
+  position: relative;
+  z-index: 2;
+  width: 31px;
+  height: 31px;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: #59657a;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.vault-favorite:hover {
+  transform: scale(1.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #d3d8df;
+}
+
+.vault-favorite.favorite-active {
+  color: #f3c85b;
+}
+
+.vault-favorite.favorite-active:hover {
+  color: #ffd76a;
+}
+
+.vault-document-title {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 42px;
+  margin: 0 0 11px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #f2f3f5;
+  font-size: 0.94rem;
+  font-weight: 650;
+  line-height: 1.35;
+  text-align: left;
+  word-break: break-word;
+  cursor: pointer;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  transition: color 0.2s ease;
+}
+
+.vault-document-title:hover {
+  color: #8fe3cf;
+}
+
+.vault-document-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  color: #68758b;
+  font-size: 0.7rem;
+}
+
+.vault-document-meta span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.meta-icon {
+  color: #8fe3cf;
+  font-size: 0.75rem;
+}
+
+.vault-ocr {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 7px 9px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.025);
+  color: #69768c;
+  font-size: 0.67rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.vault-document-card:hover .vault-ocr {
+  border-color: rgba(143, 227, 207, 0.08);
+  background: rgba(143, 227, 207, 0.035);
+}
+
+.vault-ocr > span:first-child {
+  flex-shrink: 0;
+  color: #8fe3cf;
+}
+
+.vault-ocr > span:not(:first-child) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ocr-dots {
+  flex-shrink: 0;
+  color: #556278;
+}
+
+.vault-card-divider {
+  width: 100%;
+  height: 1px;
+  margin-top: auto;
+  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.vault-card-actions {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.vault-action,
+.vault-icon-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+  color: #aeb7c6;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vault-action {
+  gap: 6px;
+  height: 31px;
+  padding: 0 10px;
+}
+
+.vault-action span {
+  color: #8fe3cf;
+  font-size: 0.65rem;
+}
+
+.vault-icon-action {
+  width: 31px;
+  height: 31px;
+  margin-left: auto;
+  font-size: 0.85rem;
+}
+
+.vault-icon-action + .vault-icon-action {
+  margin-left: 0;
+}
+
+.vault-icon-action:nth-last-child(2) {
+  margin-left: auto;
+}
+
+.vault-action:hover,
+.vault-icon-action:hover {
+  border-color: rgba(143, 227, 207, 0.25);
+  background: rgba(143, 227, 207, 0.08);
+  color: #f2f3f5;
+  transform: translateY(-1px);
+}
+
+.vault-icon-action.delete-action:hover {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.08);
+  color: #f87171;
+}
+
+@keyframes documentCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 700px) {
+  .vault-document-card {
+    min-height: 230px;
+    padding: 14px;
+  }
+
+  .vault-file-icon {
+    width: 39px;
+    height: 44px;
+  }
+
+  .vault-document-title {
+    font-size: 0.88rem;
+  }
+
+  .vault-action {
+    padding: 0 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vault-document-card,
+  .vault-file-icon,
+  .vault-favorite,
+  .vault-document-title,
+  .vault-ocr,
+  .vault-action,
+  .vault-icon-action {
+    transition: none;
+  }
+
+  .vault-document-card {
+    animation: none;
+  }
+}

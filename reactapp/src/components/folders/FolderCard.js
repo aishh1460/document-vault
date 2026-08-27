@@ -1,4 +1,6 @@
 import React from 'react';
+import Folder from '../common/Folder';
+import './FolderCard.css';
 
 const FolderCard = ({
   folder,
@@ -7,65 +9,91 @@ const FolderCard = ({
   onRename,
   onDelete,
 }) => {
+  const handleOpen = () => {
+    if (onOpen) {
+      onOpen(folder);
+    }
+  };
+
   return (
     <div
-      className="glass-card"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        padding: '1.25rem',
-        borderRadius: '14px',
-        cursor: 'pointer',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-      }}
-      onClick={() => onOpen && onOpen(folder)}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-3px)';
-        e.currentTarget.style.boxShadow = '0 10px 25px rgba(0,0,0,0.3)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = 'none';
-      }}
+      className="vault-folder-card"
+      onClick={handleOpen}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-        <span style={{ fontSize: '2.2rem' }}>📁</span>
-        <div>
-          <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-            {folder.name}
-          </h4>
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-            {docCount} document(s)
+      <div className="vault-folder-top">
+        <span className="vault-folder-label">
+          FOLDER
+        </span>
+
+        <span className="vault-folder-index">
+          {String(folder.id).padStart(2, '0')}
+        </span>
+      </div>
+
+      <div className="vault-folder-visual">
+        <Folder
+          size={1.35}
+          color="#8FE3CF"
+          items={[
+            <div className="folder-paper-item">
+              DOC
+            </div>,
+            <div className="folder-paper-item">
+              VAULT
+            </div>,
+            <div className="folder-paper-item">
+              FILE
+            </div>,
+          ]}
+        />
+      </div>
+
+      <div className="vault-folder-info">
+
+        <div className="vault-folder-name-row">
+
+          <div>
+            <h3 className="vault-folder-name">
+              {folder.name}
+            </h3>
+
+            <div className="vault-folder-count">
+              {docCount === 1
+                ? '1 document'
+                : `${docCount} documents`}
+            </div>
+          </div>
+
+          <span className="vault-folder-arrow">
+            ↗
           </span>
+
         </div>
+
       </div>
 
       <div
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          gap: '8px',
-          borderTop: '1px solid rgba(255,255,255,0.08)',
-          paddingTop: '8px',
-        }}
+        className="vault-folder-actions"
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="btn btn-secondary"
-          style={{ padding: '3px 8px', fontSize: '0.75rem' }}
-          onClick={() => onRename && onRename(folder)}
-          title="Rename folder"
+          className="vault-folder-action rename"
+          onClick={() =>
+            onRename && onRename(folder)
+          }
         >
-          ✏️ Rename
+          <span>✎</span>
+          Rename
         </button>
+
         <button
-          className="btn btn-danger"
-          style={{ padding: '3px 8px', fontSize: '0.75rem' }}
-          onClick={() => onDelete && onDelete(folder.id)}
+          className="vault-folder-action delete"
+          onClick={() =>
+            onDelete && onDelete(folder.id)
+          }
           title="Delete folder"
         >
-          🗑️
+          🗑
         </button>
       </div>
     </div>

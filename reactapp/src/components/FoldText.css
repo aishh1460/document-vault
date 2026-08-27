@@ -1,0 +1,139 @@
+.fold-text {
+    display: inline-block;
+    position: relative;
+
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+
+    transform-style: preserve-3d;
+    transform-origin: center;
+
+    white-space: pre-wrap;
+}
+
+.fold-text-unit {
+    display: inline-block;
+    position: relative;
+
+    transform-style: preserve-3d;
+    perspective: inherit;
+}
+
+.fold-text-panel {
+    display: inline-block;
+    position: relative;
+
+    transform-style: preserve-3d;
+    transform-origin: center top;
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    will-change: transform, opacity;
+
+    /*
+     * Subtle fold/crease effect.
+     */
+    text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.025),
+        0 -1px 0 rgba(0, 0, 0, 0.08);
+
+    /*
+     * Slight shading along the folded surface.
+     */
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, calc(var(--crease-shading, 0.7) * 0.045)),
+            transparent 45%,
+            rgba(0, 0, 0, calc(var(--crease-shading, 0.7) * 0.08))
+        );
+
+    background-clip: text;
+    -webkit-background-clip: text;
+
+    /*
+     * Preserve the supplied text color.
+     */
+    -webkit-text-fill-color: currentColor;
+}
+
+.fold-text-space {
+    display: inline;
+    white-space: pre;
+}
+
+
+/* -------------------------------- */
+/* Optional crease highlight */
+/* -------------------------------- */
+
+.fold-text-panel::after {
+    content: '';
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    top: 50%;
+
+    height: 1px;
+
+    pointer-events: none;
+
+    opacity: calc(var(--crease-shading, 0.7) * 0.12);
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.5),
+            transparent
+        );
+
+    transform: translateY(-50%);
+}
+
+
+/* -------------------------------- */
+/* Hover enhancement */
+/* -------------------------------- */
+
+.fold-text:hover .fold-text-panel {
+    text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.04),
+        0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+
+/* -------------------------------- */
+/* Accessibility */
+/* -------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .fold-text-panel {
+        transform: none !important;
+        opacity: 1 !important;
+        transition: none !important;
+    }
+}
+
+
+/* -------------------------------- */
+/* Responsive */
+/* -------------------------------- */
+
+@media (max-width: 768px) {
+
+    .fold-text {
+        letter-spacing: -0.035em;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .fold-text {
+        letter-spacing: -0.025em;
+    }
+}

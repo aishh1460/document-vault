@@ -26,9 +26,7 @@ const FoldText = ({
 }) => {
     const containerRef = useRef(null);
 
-    /*
-     * Split text into the requested units.
-     */
+    
     const getUnits = () => {
         if (splitBy === 'word') {
             return text.split(/(\s+)/);
@@ -58,9 +56,7 @@ const FoldText = ({
 
         const ctx = gsap.context(() => {
 
-            /*
-             * Initial folded state
-             */
+            
             gsap.set(panels, {
                 rotateX: hinge === 'bottom' ? -90 : 90,
                 transformOrigin:
@@ -84,17 +80,13 @@ const FoldText = ({
             };
 
 
-            /*
-             * Mount animation
-             */
+            
             if (trigger === 'mount') {
                 animateIn();
             }
 
 
-            /*
-             * Scroll animation
-             */
+            
             if (trigger === 'scroll') {
                 gsap.to(panels, {
                     rotateX: 0,
@@ -112,9 +104,7 @@ const FoldText = ({
             }
 
 
-            /*
-             * Hover animation
-             */
+            
             if (trigger === 'hover') {
                 const handleEnter = () => {
                     gsap.to(panels, {
@@ -195,9 +185,7 @@ const FoldText = ({
 
             {units.map((unit, index) => {
 
-                /*
-                 * Preserve spaces when split by character/word.
-                 */
+                
                 if (/^\s+$/.test(unit)) {
                     return (
                         <span

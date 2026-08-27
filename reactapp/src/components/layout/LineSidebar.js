@@ -4,9 +4,9 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 
 import './LineSidebar.css';
-
 
 const LineSidebar = ({
   items = [],
@@ -33,6 +33,7 @@ const LineSidebar = ({
   smoothing = 70,
 }) => {
 
+  const location = useLocation();
   const containerRef = useRef(null);
   const itemRefs = useRef([]);
 
@@ -42,24 +43,26 @@ const LineSidebar = ({
   const targetValues = useRef([]);
   const currentValues = useRef([]);
 
+  
+  const currentPathIndex = items.findIndex((it) => {
+    const p = typeof it === 'object' ? it.path : (it.toLowerCase() === 'dashboard' ? '/dashboard' : `/${it.toLowerCase().replace(/\s+/g, '-')}`);
+    return location.pathname === p || (p === '/dashboard' && location.pathname === '/');
+  });
+
+  const effectiveActiveIndex = currentPathIndex >= 0 ? currentPathIndex : activeIndex;
+
   const [selectedIndex, setSelectedIndex] =
-    useState(activeIndex);
+    useState(effectiveActiveIndex);
 
-
-  /* =====================================================
-     Keep selected item synchronized with App
-     ===================================================== */
+  
 
   useEffect(() => {
 
-    setSelectedIndex(activeIndex);
+    setSelectedIndex(effectiveActiveIndex);
 
-  }, [activeIndex]);
+  }, [effectiveActiveIndex]);
 
-
-  /* =====================================================
-     Animation loop
-     ===================================================== */
+  
 
   const animate = useCallback(
     (time) => {
@@ -79,7 +82,6 @@ const LineSidebar = ({
         1 - Math.exp(-delta / duration);
 
       let stillMoving = false;
-
 
       itemRefs.current.forEach(
         (item, index) => {
@@ -105,7 +107,6 @@ const LineSidebar = ({
             next.toFixed(4)
           );
 
-
           if (
             Math.abs(target - next) >
             0.001
@@ -117,7 +118,6 @@ const LineSidebar = ({
 
         }
       );
-
 
       if (stillMoving) {
 
@@ -136,10 +136,7 @@ const LineSidebar = ({
     [smoothing]
   );
 
-
-  /* =====================================================
-     Start animation
-     ===================================================== */
+  
 
   const startAnimation = useCallback(() => {
 
@@ -163,10 +160,7 @@ const LineSidebar = ({
 
   }, [animate]);
 
-
-  /* =====================================================
-     Cursor proximity
-     ===================================================== */
+  
 
   const handlePointerMove = useCallback(
     (event) => {
@@ -176,7 +170,6 @@ const LineSidebar = ({
 
       if (!container) return;
 
-
       const containerRect =
         container.getBoundingClientRect();
 
@@ -184,12 +177,10 @@ const LineSidebar = ({
         event.clientY -
         containerRect.top;
 
-
       itemRefs.current.forEach(
         (item, index) => {
 
           if (!item) return;
-
 
           const itemTop =
             item.offsetTop;
@@ -198,19 +189,16 @@ const LineSidebar = ({
             itemTop +
             item.offsetHeight / 2;
 
-
           const distance =
             Math.abs(
               pointerY -
               itemCenter
             );
 
-
           let strength =
             1 -
             distance /
             proximityRadius;
-
 
           strength =
             Math.max(
@@ -221,19 +209,13 @@ const LineSidebar = ({
               )
             );
 
-
-          /*
-           * Smooth falloff
-           */
+          
           strength =
             strength *
             strength *
             (3 - 2 * strength);
 
-
-          /*
-           * Keep active item slightly highlighted
-           */
+          
           if (
             selectedIndex === index
           ) {
@@ -246,13 +228,11 @@ const LineSidebar = ({
 
           }
 
-
           targetValues.current[index] =
             strength;
 
         }
       );
-
 
       startAnimation();
 
@@ -264,10 +244,7 @@ const LineSidebar = ({
     ]
   );
 
-
-  /* =====================================================
-     Cursor leaves sidebar
-     ===================================================== */
+  
 
   const handlePointerLeave =
     useCallback(() => {
@@ -277,10 +254,7 @@ const LineSidebar = ({
           () => 0
         );
 
-
-      /*
-       * Keep active item slightly visible
-       */
+      
       if (
         selectedIndex >= 0 &&
         selectedIndex <
@@ -293,7 +267,6 @@ const LineSidebar = ({
 
       }
 
-
       startAnimation();
 
     }, [
@@ -301,31 +274,26 @@ const LineSidebar = ({
       startAnimation,
     ]);
 
-
-  /* =====================================================
-     Click
-     ===================================================== */
+  
 
   const handleClick =
-    (index) => {
+    (e, index, item) => {
 
       setSelectedIndex(index);
 
       if (onItemClick) {
 
         onItemClick(
+          e,
           index,
-          items[index]
+          item
         );
 
       }
 
     };
 
-
-  /* =====================================================
-     Cleanup
-     ===================================================== */
+  
 
   useEffect(() => {
 
@@ -345,10 +313,7 @@ const LineSidebar = ({
 
   }, []);
 
-
-  /* =====================================================
-     Initialize arrays
-     ===================================================== */
+  
 
   useEffect(() => {
 
@@ -360,10 +325,7 @@ const LineSidebar = ({
 
   }, [items.length]);
 
-
-  /* =====================================================
-     RENDER
-     ===================================================== */
+  
 
   return (
 
@@ -409,70 +371,72 @@ const LineSidebar = ({
       <div className="line-sidebar-list">
 
         {items.map(
-          (item, index) => (
+          (item, index) => {
+            const itemLabel = typeof item === 'object' ? item.name : item;
+            const itemPath = typeof item === 'object' ? item.path : (item.toLowerCase() === 'dashboard' ? '/dashboard' : `/${item.toLowerCase().replace(/\s+/g, '-')}`);
 
-            <div
-              key={`${item}-${index}`}
+            return (
+              <NavLink
+                key={`${itemLabel}-${index}`}
+                to={itemPath}
 
-              ref={(element) => {
+                ref={(element) => {
 
-                itemRefs.current[index] =
-                  element;
+                  itemRefs.current[index] =
+                    element;
 
-              }}
+                }}
 
-              className={`
-                line-sidebar-item
-                ${
-                  selectedIndex === index
-                    ? 'line-sidebar-item-active'
-                    : ''
+                className={({ isActive }) => `
+                  line-sidebar-item
+                  ${
+                    isActive || selectedIndex === index
+                      ? 'line-sidebar-item-active'
+                      : ''
+                  }
+                `}
+
+                onClick={(e) =>
+                  handleClick(e, index, item)
                 }
-              `}
+              >
 
-              onClick={() =>
-                handleClick(index)
-              }
-            >
+                {}
 
-              {/* Horizontal marker */}
+                {showMarker && (
 
-              {showMarker && (
+                  <div
+                    className="line-sidebar-marker"
+                  />
 
-                <div
-                  className="line-sidebar-marker"
-                />
+                )}
 
-              )}
+                {}
 
+                {showIndex && (
 
-              {/* Number */}
+                  <span
+                    className="line-sidebar-index"
+                  >
+                    {String(index + 1).padStart(
+                      2,
+                      '0'
+                    )}
+                  </span>
 
-              {showIndex && (
+                )}
+
+                {}
 
                 <span
-                  className="line-sidebar-index"
+                  className="line-sidebar-label"
                 >
-                  {String(index + 1).padStart(
-                    2,
-                    '0'
-                  )}
+                  {itemLabel}
                 </span>
 
-              )}
-
-
-              {/* Label */}
-
-              <span
-                className="line-sidebar-label"
-              >
-                {item}
-              </span>
-
-            </div>
-
-          )
+              </NavLink>
+            );
+          }
         )}
 
       </div>
@@ -480,6 +444,5 @@ const LineSidebar = ({
     </nav>
   );
 };
-
 
 export default LineSidebar;

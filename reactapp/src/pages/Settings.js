@@ -59,7 +59,7 @@ const Settings = () => {
         </p>
       </div>
 
-      {/* Account Info Card */}
+      {}
       <div className="glass-card" style={{ padding: '1.5rem', borderRadius: '16px' }}>
         <h3 style={{ margin: '0 0 16px 0', fontSize: '1.1rem', color: 'var(--text-primary)' }}>
           Account & Credentials
@@ -128,7 +128,7 @@ const Settings = () => {
         </form>
       </div>
 
-      {/* Preferences Card */}
+      {}
       <div className="glass-card" style={{ padding: '1.5rem', borderRadius: '16px' }}>
         <h3 style={{ margin: '0 0 16px 0', fontSize: '1.1rem', color: 'var(--text-primary)' }}>
           Display & Appearance

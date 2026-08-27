@@ -130,7 +130,7 @@ const Trash = () => {
         </div>
       )}
 
-      {/* Confirm Permanent Delete */}
+      {}
       <ConfirmModal
         isOpen={showConfirm}
         onClose={() => setShowConfirm(false)}

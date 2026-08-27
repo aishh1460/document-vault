@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 import StorageCard from '../components/dashboard/StorageCard';
@@ -14,12 +15,6 @@ import * as reminderService from '../services/reminderService';
 import * as activityService from '../services/activityService';
 
 import './Dashboard.css';
-
-
-/* =========================================================
-   SMALL LOCAL ICON SYSTEM
-   No additional dependency required.
-   ========================================================= */
 
 const Icon = ({ name, size = 18, strokeWidth = 1.8 }) => {
 
@@ -42,33 +37,31 @@ const Icon = ({ name, size = 18, strokeWidth = 1.8 }) => {
         <svg {...common}>
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <polyline points="14 2 14 8 20 8" />
-          <line x1="8" y1="13" x2="16" y2="13" />
-          <line x1="8" y1="17" x2="16" y2="17" />
         </svg>
       );
 
     case 'folder':
       return (
         <svg {...common}>
-          <path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
         </svg>
       );
 
     case 'star':
       return (
         <svg {...common}>
-          <polygon points="12 2 15.1 8.3 22 9.3 17 14.2 18.2 21 12 17.8 5.8 21 7 14.2 2 9.3 8.9 8.3 12 2" />
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
         </svg>
       );
 
     case 'share':
       return (
         <svg {...common}>
-          <circle cx="18" cy="5" r="2.5" />
-          <circle cx="6" cy="12" r="2.5" />
-          <circle cx="18" cy="19" r="2.5" />
-          <line x1="8.2" y1="10.8" x2="15.8" y2="6.2" />
-          <line x1="8.2" y1="13.2" x2="15.8" y2="17.8" />
+          <circle cx="18" cy="5" r="3" />
+          <circle cx="6" cy="12" r="3" />
+          <circle cx="18" cy="19" r="3" />
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
         </svg>
       );
 
@@ -101,15 +94,14 @@ const Icon = ({ name, size = 18, strokeWidth = 1.8 }) => {
       return (
         <svg {...common}>
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-          <polyline points="9 12 11 14 15 10" />
         </svg>
       );
 
     case 'clock':
       return (
         <svg {...common}>
-          <circle cx="12" cy="12" r="9" />
-          <polyline points="12 7 12 12 15 14" />
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
         </svg>
       );
 
@@ -117,8 +109,7 @@ const Icon = ({ name, size = 18, strokeWidth = 1.8 }) => {
       return (
         <svg {...common}>
           <polyline points="3 6 5 6 21 6" />
-          <path d="M19 6l-1 14H6L5 6" />
-          <path d="M9 6V4h6v2" />
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
         </svg>
       );
 
@@ -137,15 +128,17 @@ const Icon = ({ name, size = 18, strokeWidth = 1.8 }) => {
         </svg>
       );
 
+    case 'sparkles':
+      return (
+        <svg {...common}>
+          <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z" />
+        </svg>
+      );
+
     default:
       return null;
   }
 };
-
-
-/* =========================================================
-   DASHBOARD
-   ========================================================= */
 
 const Dashboard = ({
   setActivePage,
@@ -159,8 +152,13 @@ const Dashboard = ({
   onDownloadDocument,
   refreshTrigger,
 }) => {
-
+  const navigate = useNavigate();
   const { currentUser } = useAuth();
+
+  const goToPage = (page) => {
+    if (setActivePage) setActivePage(page);
+    navigate(`/${page}`);
+  };
 
   const [stats, setStats] = useState(null);
   const [recentDocs, setRecentDocs] = useState([]);
@@ -168,10 +166,7 @@ const Dashboard = ({
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
-  /* =======================================================
-     LOAD DASHBOARD DATA
-     ======================================================= */
+  
 
   useEffect(() => {
 
@@ -180,7 +175,6 @@ const Dashboard = ({
     }
 
   }, [currentUser, refreshTrigger]);
-
 
   const loadDashboardData = async () => {
 
@@ -213,11 +207,9 @@ const Dashboard = ({
 
     ]);
 
-
     if (statsResult.status === 'fulfilled') {
       setStats(statsResult.value.data);
     }
-
 
     if (docsResult.status === 'fulfilled') {
 
@@ -230,14 +222,12 @@ const Dashboard = ({
       setRecentDocs(list);
     }
 
-
     if (remindersResult.status === 'fulfilled') {
 
       setReminders(
         remindersResult.value.data || []
       );
     }
-
 
     if (activitiesResult.status === 'fulfilled') {
 
@@ -249,10 +239,7 @@ const Dashboard = ({
     setLoading(false);
   };
 
-
-  /* =======================================================
-     DISMISS REMINDER
-     ======================================================= */
+  
 
   const handleDismissReminder = async (id) => {
 
@@ -273,10 +260,7 @@ const Dashboard = ({
     }
   };
 
-
-  /* =======================================================
-     DISPLAY VALUES
-     ======================================================= */
+  
 
   const totalDocuments =
     stats?.totalDocuments ??
@@ -297,19 +281,13 @@ const Dashboard = ({
   const attentionCount =
     reminders.length;
 
-
-  /* =======================================================
-     RENDER
-     ======================================================= */
+  
 
   return (
 
     <div className="dashboard-page">
 
-
-      {/* ===================================================
-          WELCOME
-          =================================================== */}
+      {}
 
       <section className="dashboard-welcome">
 
@@ -334,7 +312,6 @@ const Dashboard = ({
 
         </div>
 
-
         <button
           className="dashboard-primary-action"
           onClick={onUploadClick}
@@ -353,16 +330,13 @@ const Dashboard = ({
 
       </section>
 
-
-      {/* ===================================================
-          STATISTICS
-          =================================================== */}
+      {}
 
       <section className="dashboard-stat-strip">
 
         <button
           className="dashboard-stat"
-          onClick={() => setActivePage('documents')}
+          onClick={() => goToPage('documents')}
         >
 
           <div className="dashboard-stat-icon">
@@ -389,10 +363,9 @@ const Dashboard = ({
 
         </button>
 
-
         <button
           className="dashboard-stat"
-          onClick={() => setActivePage('folders')}
+          onClick={() => goToPage('folders')}
         >
 
           <div className="dashboard-stat-icon">
@@ -415,10 +388,9 @@ const Dashboard = ({
 
         </button>
 
-
         <button
           className="dashboard-stat"
-          onClick={() => setActivePage('favorites')}
+          onClick={() => goToPage('favorites')}
         >
 
           <div className="dashboard-stat-icon">
@@ -441,10 +413,9 @@ const Dashboard = ({
 
         </button>
 
-
         <button
           className="dashboard-stat"
-          onClick={() => setActivePage('shared')}
+          onClick={() => goToPage('shared')}
         >
 
           <div className="dashboard-stat-icon">
@@ -469,17 +440,11 @@ const Dashboard = ({
 
       </section>
 
-
-      {/* ===================================================
-          MAIN CONTENT
-          =================================================== */}
+      {}
 
       <section className="dashboard-main-grid">
 
-
-        {/* =================================================
-            RECENT DOCUMENTS
-            ================================================= */}
+        {}
 
         <div className="dashboard-section dashboard-documents-section">
 
@@ -499,14 +464,13 @@ const Dashboard = ({
 
             <button
               className="dashboard-view-all"
-              onClick={() => setActivePage('documents')}
+              onClick={() => goToPage('documents')}
             >
               View all
               <Icon name="arrow" size={13} />
             </button>
 
           </div>
-
 
           {loading ? (
 
@@ -572,10 +536,7 @@ const Dashboard = ({
 
         </div>
 
-
-        {/* =================================================
-            QUICK ACTIONS
-            ================================================= */}
+        {}
 
         <aside className="dashboard-sidebar-section">
 
@@ -594,7 +555,6 @@ const Dashboard = ({
             </div>
 
           </div>
-
 
           <div className="dashboard-actions-list">
 
@@ -623,7 +583,6 @@ const Dashboard = ({
 
             </button>
 
-
             <button
               className="dashboard-action"
               onClick={onCreateFolderClick}
@@ -649,10 +608,9 @@ const Dashboard = ({
 
             </button>
 
-
             <button
               className="dashboard-action"
-              onClick={() => setActivePage('shared')}
+              onClick={() => goToPage('shared')}
             >
 
               <div className="dashboard-action-icon">
@@ -675,10 +633,9 @@ const Dashboard = ({
 
             </button>
 
-
             <button
               className="dashboard-action"
-              onClick={() => setActivePage('trash')}
+              onClick={() => goToPage('trash')}
             >
 
               <div className="dashboard-action-icon">
@@ -707,15 +664,11 @@ const Dashboard = ({
 
       </section>
 
-
-      {/* ===================================================
-          SECURITY / STORAGE / ACTIVITY
-          =================================================== */}
+      {}
 
       <section className="dashboard-secondary-grid">
 
-
-        {/* Vault Health */}
+        {}
 
         <div className="dashboard-panel">
 
@@ -748,7 +701,6 @@ const Dashboard = ({
 
           </div>
 
-
           <VaultHealthCard
             healthScore={healthScore}
             attentionCount={attentionCount}
@@ -757,8 +709,7 @@ const Dashboard = ({
 
         </div>
 
-
-        {/* Storage */}
+        {}
 
         <div className="dashboard-panel">
 
@@ -786,15 +737,13 @@ const Dashboard = ({
 
           </div>
 
-
           <StorageCard
             usedBytes={stats?.storageUsedBytes || 0}
           />
 
         </div>
 
-
-        {/* Activity */}
+        {}
 
         <div className="dashboard-panel">
 
@@ -822,28 +771,23 @@ const Dashboard = ({
 
             <button
               className="dashboard-mini-link"
-              onClick={() => setActivePage('recent')}
+              onClick={() => goToPage('recent')}
             >
               View all
             </button>
 
           </div>
 
-
           <RecentActivityWidget
             activities={activities}
-            onViewAll={() => setActivePage('recent')}
+            onViewAll={() => goToPage('recent')}
           />
 
         </div>
 
       </section>
 
-
-      {/* ===================================================
-          ATTENTION
-          Only visually prominent when there are reminders.
-          =================================================== */}
+      {}
 
       {reminders.length > 0 && (
 
@@ -869,7 +813,7 @@ const Dashboard = ({
 
             <button
               className="dashboard-view-all"
-              onClick={() => setActivePage('reminders')}
+              onClick={() => goToPage('reminders')}
             >
               View reminders
               <Icon name="arrow" size={13} />
@@ -877,21 +821,17 @@ const Dashboard = ({
 
           </div>
 
-
           <AttentionRequiredCard
             reminders={reminders}
             onDismiss={handleDismissReminder}
-            onViewAll={() => setActivePage('reminders')}
+            onViewAll={() => goToPage('reminders')}
           />
 
         </section>
 
       )}
 
-
-      {/* ===================================================
-          QUIET EMPTY STATE
-          =================================================== */}
+      {}
 
       {reminders.length === 0 && (
 
@@ -920,6 +860,5 @@ const Dashboard = ({
     </div>
   );
 };
-
 
 export default Dashboard;

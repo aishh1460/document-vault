@@ -176,7 +176,7 @@ const Register = ({ initialAdminMode = false, onToggleLogin, onRegisterSuccess }
             </p>
           </div>
 
-          {/* Registration Mode Switch */}
+          {}
           <div className="auth-tabs" style={{ marginBottom: '20px' }}>
             <button
               type="button"

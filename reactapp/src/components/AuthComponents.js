@@ -21,7 +21,7 @@ export const Login = ({ onLoginSuccess, onToggleRegister }) => {
       }
 
       const response = await authService.login(payload);
-      const data = response.data; // token, tokenType, userId, username, role, mfaRequired
+      const data = response.data; 
 
       if (data.mfaRequired && !mfaRequired) {
         setMfaRequired(true);
@@ -29,7 +29,7 @@ export const Login = ({ onLoginSuccess, onToggleRegister }) => {
         return;
       }
 
-      // Successful login
+      
       localStorage.setItem('vault_token', data.token);
       localStorage.setItem('vault_user', JSON.stringify({
         userId: data.userId,
@@ -37,7 +37,7 @@ export const Login = ({ onLoginSuccess, onToggleRegister }) => {
         role: data.role,
       }));
 
-      // Fetch user profile
+      
       const profileRes = await authService.getProfile(data.userId);
       const fullUser = {
         ...data,
@@ -145,23 +145,23 @@ export const Register = ({ onRegisterSuccess, onToggleLogin }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  // Helper: extract a human-friendly error from Spring Boot validation responses
+  
   const parseError = (err) => {
     const data = err.response?.data;
     if (!data) return 'Registration failed. Please try again.';
 
-    // Spring MethodArgumentNotValidException returns an 'errors' or 'fieldErrors' array
+    
     if (Array.isArray(data.errors) && data.errors.length > 0) {
       return data.errors.map(e => e.defaultMessage || e.message || e).join(', ');
     }
     if (Array.isArray(data.fieldErrors) && data.fieldErrors.length > 0) {
       return data.fieldErrors.map(e => `${e.field}: ${e.defaultMessage}`).join(', ');
     }
-    // Some Spring setups return a top-level 'message' string
+    
     if (data.message && !data.message.toLowerCase().includes('validation failed for object')) {
       return data.message;
     }
-    // Fallback with field hints
+    
     if (data.message) {
       return 'Validation failed. Please check: username (min 3 chars), password (min 8 chars), valid email.';
     }
@@ -172,7 +172,7 @@ export const Register = ({ onRegisterSuccess, onToggleLogin }) => {
     e.preventDefault();
     setError('');
 
-    // --- Client-side validation ---
+    
     if (username.trim().length < 3) {
       setError('Username must be at least 3 characters long.');
       return;
@@ -210,7 +210,6 @@ export const Register = ({ onRegisterSuccess, onToggleLogin }) => {
       setLoading(false);
     }
   };
-
 
   return (
     <div className="glass-card" style={{ maxWidth: '500px', margin: '3rem auto' }}>
@@ -285,7 +284,7 @@ export const Register = ({ onRegisterSuccess, onToggleLogin }) => {
 
 export const MfaSetup = ({ userId, onMfaStatusChange, onClose }) => {
   const [secretKey] = useState(() => {
-    // Generate a random mocked secret key for display
+    
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
     let key = '';
     for (let i = 0; i < 16; i++) {
@@ -336,10 +335,10 @@ export const MfaSetup = ({ userId, onMfaStatusChange, onClose }) => {
           </p>
 
           <div style={{ background: '#fff', padding: '1rem', width: '180px', height: '180px', margin: '0 auto', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '8px' }}>
-            {/* Simple QR mockup using SVG */}
+            {}
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <rect width="100" height="100" fill="white"/>
-              {/* Outer corners */}
+              {}
               <rect x="10" y="10" width="20" height="20" fill="black"/>
               <rect x="13" y="13" width="14" height="14" fill="white"/>
               <rect x="16" y="16" width="8" height="8" fill="black"/>
@@ -352,7 +351,7 @@ export const MfaSetup = ({ userId, onMfaStatusChange, onClose }) => {
               <rect x="13" y="73" width="14" height="14" fill="white"/>
               <rect x="16" y="76" width="8" height="8" fill="black"/>
               
-              {/* Fake inner pixels */}
+              {}
               <rect x="35" y="35" width="30" height="30" fill="black" opacity="0.8"/>
               <rect x="38" y="38" width="10" height="10" fill="white"/>
               <rect x="52" y="52" width="10" height="10" fill="white"/>

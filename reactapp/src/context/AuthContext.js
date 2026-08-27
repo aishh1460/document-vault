@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await authService.logout();
     } catch (e) {
-      // Clean storage regardless
+      
     }
     localStorage.removeItem('vault_token');
     localStorage.removeItem('vault_user');

@@ -1,8 +1,5 @@
 import React from 'react';
 
-/**
- * Renders text with substring matching the query wrapped in a stylized <mark> tag.
- */
 const HighlightText = ({ text, highlight = '', className = '', style = {} }) => {
   if (!text) return null;
   if (!highlight || !highlight.trim()) {

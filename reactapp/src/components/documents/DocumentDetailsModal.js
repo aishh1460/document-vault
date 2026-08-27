@@ -101,7 +101,7 @@ const DocumentDetailsModal = ({
       }
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        {/* Title and rename */}
+        {}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.03)', padding: '12px', borderRadius: '8px' }}>
           {renaming ? (
             <div style={{ display: 'flex', gap: '8px', flex: 1 }}>
@@ -132,7 +132,7 @@ const DocumentDetailsModal = ({
           )}
         </div>
 
-        {/* Cryptographic and security parameters */}
+        {}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
           <div className="glass-card" style={{ padding: '12px', fontSize: '0.85rem' }}>
             <h5 style={{ margin: '0 0 8px 0', color: 'var(--primary-color)' }}>🔐 Cryptographic Parameters</h5>
@@ -154,7 +154,7 @@ const DocumentDetailsModal = ({
           </div>
         </div>
 
-        {/* Move to folder */}
+        {}
         <div className="glass-card" style={{ padding: '12px' }}>
           <h5 style={{ margin: '0 0 8px 0', fontSize: '0.9rem' }}>📁 Folder Location</h5>
           <div style={{ display: 'flex', gap: '8px' }}>
@@ -175,7 +175,7 @@ const DocumentDetailsModal = ({
           </div>
         </div>
 
-        {/* Version Management */}
+        {}
         <div className="glass-card" style={{ padding: '12px' }}>
           <h5 style={{ margin: '0 0 8px 0', fontSize: '0.9rem' }}>📦 Version Control</h5>
           <form onSubmit={handleVersionUpload} style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
@@ -190,7 +190,7 @@ const DocumentDetailsModal = ({
             </Button>
           </form>
 
-          {/* Revert to versions */}
+          {}
           <div style={{ maxHeight: '100px', overflowY: 'auto' }}>
             <table className="custom-table" style={{ fontSize: '0.75rem' }}>
               <thead>
@@ -221,7 +221,7 @@ const DocumentDetailsModal = ({
           </div>
         </div>
 
-        {/* OCR extracted text */}
+        {}
         {doc.extractedText && (
           <div className="glass-card" style={{ padding: '12px' }}>
             <h5 style={{ margin: '0 0 8px 0', fontSize: '0.9rem' }}>🔍 OCR Extracted Text</h5>

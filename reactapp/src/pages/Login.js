@@ -73,9 +73,9 @@ const Login = ({ initialAdminMode = false, onToggleRegister }) => {
 
       <div className="auth-shell">
 
-        {/* ================================================= */}
-        {/* LEFT — VISUAL PANEL */}
-        {/* ================================================= */}
+        {}
+        {}
+        {}
 
         <section className="auth-visual">
 
@@ -129,16 +129,15 @@ const Login = ({ initialAdminMode = false, onToggleRegister }) => {
 
         </section>
 
-
-        {/* ================================================= */}
-        {/* RIGHT — LOGIN PANEL */}
-        {/* ================================================= */}
+        {}
+        {}
+        {}
 
         <section className="auth-form-panel">
 
           <div className="auth-form-container">
 
-            {/* Brand */}
+            {}
 
             <div className="auth-brand">
 
@@ -158,8 +157,7 @@ const Login = ({ initialAdminMode = false, onToggleRegister }) => {
 
             </div>
 
-
-            {/* Header */}
+            {}
 
             <div className="auth-header">
 
@@ -181,8 +179,7 @@ const Login = ({ initialAdminMode = false, onToggleRegister }) => {
 
             </div>
 
-
-            {/* Portal switch */}
+            {}
 
             <div className="auth-tabs">
 
@@ -212,15 +209,14 @@ const Login = ({ initialAdminMode = false, onToggleRegister }) => {
 
             </div>
 
-
-            {/* Form */}
+            {}
 
             <form
               onSubmit={handleSubmit}
               className="auth-form"
             >
 
-              {/* Username */}
+              {}
 
               <div className="auth-field">
 
@@ -258,8 +254,7 @@ const Login = ({ initialAdminMode = false, onToggleRegister }) => {
 
               </div>
 
-
-              {/* Password */}
+              {}
 
               <div className="auth-field">
 
@@ -297,8 +292,7 @@ const Login = ({ initialAdminMode = false, onToggleRegister }) => {
 
               </div>
 
-
-              {/* Submit */}
+              {}
 
               <Button
                 type="submit"
@@ -311,8 +305,7 @@ const Login = ({ initialAdminMode = false, onToggleRegister }) => {
                   : 'Sign In to Vault'}
               </Button>
 
-
-              {/* Register */}
+              {}
               {onToggleRegister && (
                 <div className="auth-register">
                   <span>
@@ -329,8 +322,7 @@ const Login = ({ initialAdminMode = false, onToggleRegister }) => {
 
             </form>
 
-
-            {/* Security note */}
+            {}
 
             <div className="auth-security-note">
 

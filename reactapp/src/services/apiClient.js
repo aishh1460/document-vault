@@ -9,7 +9,6 @@ const apiClient = axios.create({
   },
 });
 
-// Request interceptor to inject Authorization header
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('vault_token');
@@ -21,7 +20,6 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle token expiration / common errors
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {

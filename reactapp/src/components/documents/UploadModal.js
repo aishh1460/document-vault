@@ -11,7 +11,7 @@ const UploadModal = ({ isOpen, onClose, onUploadSuccess, existingDocs = [] }) =>
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duplicateWarning, setDuplicateWarning] = useState(null);
-  // Phase 4/5: duplicate detected via API — holds { file, existingDocumentId }
+  
   const [pendingVersionUpload, setPendingVersionUpload] = useState(null);
   const [changeDescription, setChangeDescription] = useState('');
 
@@ -24,7 +24,7 @@ const UploadModal = ({ isOpen, onClose, onUploadSuccess, existingDocs = [] }) =>
       setPendingVersionUpload(null);
       setChangeDescription('');
 
-      // Client-side name check (quick heuristic)
+      
       const dup = selected.find((f) =>
         existingDocs.some((d) => (d.documentTitle || d.originalFileName || d.fileName) === f.name)
       );
@@ -55,7 +55,7 @@ const UploadModal = ({ isOpen, onClose, onUploadSuccess, existingDocs = [] }) =>
           const status = err.response?.status;
           const data = err.response?.data;
           if (status === 409 && data?.existingDocumentId) {
-            // Server confirmed duplicate — offer version upload
+            
             setPendingVersionUpload({ file, existingDocumentId: data.existingDocumentId });
             setUploading(false);
             setProgress(0);
@@ -143,7 +143,7 @@ const UploadModal = ({ isOpen, onClose, onUploadSuccess, existingDocs = [] }) =>
       footer={renderFooter()}
     >
       <form onSubmit={pendingVersionUpload ? handleVersionUpload : handleUpload} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        {/* Dropzone */}
+        {}
         <div
           className="dropzone"
           style={{
@@ -174,7 +174,7 @@ const UploadModal = ({ isOpen, onClose, onUploadSuccess, existingDocs = [] }) =>
           />
         </div>
 
-        {/* Duplicate Warning (client-side heuristic) */}
+        {}
         {duplicateWarning && !pendingVersionUpload && (
           <div style={{ background: 'rgba(245, 158, 11, 0.15)', border: '1px solid rgba(245, 158, 11, 0.3)', borderRadius: '8px', padding: '10px 14px', fontSize: '0.85rem', color: '#fbbf24', display: 'flex', gap: '8px', alignItems: 'center' }}>
             <span>⚠️</span>
@@ -182,7 +182,7 @@ const UploadModal = ({ isOpen, onClose, onUploadSuccess, existingDocs = [] }) =>
           </div>
         )}
 
-        {/* Server-confirmed duplicate: version upload prompt */}
+        {}
         {pendingVersionUpload && (
           <div style={{ background: 'rgba(99, 102, 241, 0.1)', border: '1px solid rgba(99, 102, 241, 0.3)', borderRadius: '8px', padding: '12px 14px', fontSize: '0.85rem', color: '#a5b4fc' }}>
             <div style={{ fontWeight: 600, marginBottom: '8px' }}>🔄 This file already exists in the vault</div>
@@ -203,7 +203,7 @@ const UploadModal = ({ isOpen, onClose, onUploadSuccess, existingDocs = [] }) =>
           </div>
         )}
 
-        {/* Category selector (hidden when in version upload mode) */}
+        {}
         {!pendingVersionUpload && (
           <div className="form-group">
             <label className="form-label" style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem' }}>
@@ -228,7 +228,7 @@ const UploadModal = ({ isOpen, onClose, onUploadSuccess, existingDocs = [] }) =>
           </div>
         )}
 
-        {/* Progress Bar */}
+        {}
         {uploading && (
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '4px' }}>

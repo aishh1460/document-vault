@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useToast } from '../../context/ToastContext';
@@ -6,6 +7,7 @@ import * as notificationService from '../../services/notificationService';
 import ConfirmModal from '../common/ConfirmModal';
 
 const Navbar = ({ onSearch, searchQuery, setSearchQuery, activePage, setActivePage }) => {
+  const navigate = useNavigate();
   const { currentUser, logoutUser } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { success } = useToast();
@@ -42,7 +44,7 @@ const Navbar = ({ onSearch, searchQuery, setSearchQuery, activePage, setActivePa
       setNotifications(list);
       setUnreadCount(list.filter((n) => !n.isRead && !n.read).length);
     } catch (e) {
-      // quiet fail
+      
     }
   };
 
@@ -65,6 +67,7 @@ const Navbar = ({ onSearch, searchQuery, setSearchQuery, activePage, setActivePa
     setShowLogoutConfirm(false);
     await logoutUser();
     success('Logged out successfully');
+    navigate('/login');
   };
 
   return (
@@ -85,19 +88,20 @@ const Navbar = ({ onSearch, searchQuery, setSearchQuery, activePage, setActivePa
           zIndex: 100,
         }}
       >
-        {/* Brand */}
-        <div
+        {}
+        <NavLink
+          to="/dashboard"
           className="brand"
-          style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
-          onClick={() => setActivePage('dashboard')}
+          style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
+          onClick={() => setActivePage && setActivePage('dashboard')}
         >
           <span className="brand-icon" style={{ fontSize: '1.5rem' }}>🛡️</span>
           <span style={{ fontSize: '1.15rem', fontWeight: 700, letterSpacing: '-0.02em' }}>
             Digital Document Vault System
           </span>
-        </div>
+        </NavLink>
 
-        {/* Global Search */}
+        {}
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -131,9 +135,9 @@ const Navbar = ({ onSearch, searchQuery, setSearchQuery, activePage, setActivePa
           />
         </form>
 
-        {/* Right Action Icons */}
+        {}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          {/* Theme Toggle */}
+          {}
           <button
             onClick={toggleTheme}
             style={{
@@ -150,7 +154,7 @@ const Navbar = ({ onSearch, searchQuery, setSearchQuery, activePage, setActivePa
             {theme === 'dark' ? '☀️' : '🌙'}
           </button>
 
-          {/* Notifications Bell */}
+          {}
           <div ref={notifRef} style={{ position: 'relative' }}>
             <button
               onClick={() => setShowNotifMenu(!showNotifMenu)}
@@ -248,7 +252,7 @@ const Navbar = ({ onSearch, searchQuery, setSearchQuery, activePage, setActivePa
             )}
           </div>
 
-          {/* User Profile Badge */}
+          {}
           {currentUser && (
             <div
               className="user-profile-badge"
@@ -287,7 +291,7 @@ const Navbar = ({ onSearch, searchQuery, setSearchQuery, activePage, setActivePa
             </div>
           )}
 
-          {/* Logout Button */}
+          {}
           <button
             className="btn btn-secondary"
             onClick={() => setShowLogoutConfirm(true)}
@@ -298,7 +302,7 @@ const Navbar = ({ onSearch, searchQuery, setSearchQuery, activePage, setActivePa
         </div>
       </header>
 
-      {/* Logout Confirmation Modal */}
+      {}
       <ConfirmModal
         isOpen={showLogoutConfirm}
         onClose={() => setShowLogoutConfirm(false)}

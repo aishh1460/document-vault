@@ -211,7 +211,7 @@ const Folders = ({
       }}
     >
 
-      {/* Header */}
+      {}
 
       <div
         style={{
@@ -296,7 +296,7 @@ const Folders = ({
 
       </div>
 
-      {/* Content */}
+      {}
 
       {loading ? (
 
@@ -403,7 +403,7 @@ const Folders = ({
 
       )}
 
-      {/* Delete Confirmation */}
+      {}
 
       <ConfirmModal
         isOpen={showDeleteConfirm}

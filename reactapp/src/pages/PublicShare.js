@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
 import * as shareService from '../services/shareService';
 
-const PublicShare = ({ token, onExit }) => {
+const PublicShare = ({ token: tokenProp, onExit }) => {
+  const { token: tokenParam } = useParams();
+  const navigate = useNavigate();
+  const token = tokenProp || tokenParam;
+
+  const handleExit = () => {
+    if (onExit) onExit();
+    else navigate('/dashboard');
+  };
   const [shareInfo, setShareInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -70,11 +79,9 @@ const PublicShare = ({ token, onExit }) => {
         {error ? (
           <div>
             <p style={{ color: '#ef4444', margin: '1rem 0' }}>{error}</p>
-            {onExit && (
-              <Button variant="secondary" onClick={onExit}>
-                Back to Vault
-              </Button>
-            )}
+            <Button variant="secondary" onClick={handleExit}>
+              Back to Vault
+            </Button>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '1.5rem' }}>
@@ -101,11 +108,9 @@ const PublicShare = ({ token, onExit }) => {
               📥 Download Decrypted Document
             </Button>
 
-            {onExit && (
-              <Button variant="secondary" onClick={onExit} style={{ width: '100%' }}>
-                Go to Vault Dashboard
-              </Button>
-            )}
+            <Button variant="secondary" onClick={handleExit} style={{ width: '100%' }}>
+              Go to Vault Dashboard
+            </Button>
           </div>
         )}
       </div>

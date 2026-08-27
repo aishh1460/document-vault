@@ -2,7 +2,7 @@ import React from 'react';
 
 const Badge = ({
   children,
-  variant = 'default', // default, primary, success, warning, danger, info
+  variant = 'default', 
   size = 'sm',
   style = {},
 }) => {

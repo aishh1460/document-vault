@@ -1,16 +1,28 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import FoldText from '../components/FoldText';
 import './LandingPage.css';
 
 const LandingPage = ({ onGetStarted, onLogin }) => {
+    const navigate = useNavigate();
+
+    const handleGetStarted = () => {
+        if (onGetStarted) onGetStarted();
+        else navigate('/register');
+    };
+
+    const handleLogin = () => {
+        if (onLogin) onLogin();
+        else navigate('/login');
+    };
     return (
         <div className="landing-page">
 
-            {/* Background decoration */}
+            {}
             <div className="landing-glow landing-glow-one" />
             <div className="landing-glow landing-glow-two" />
 
-            {/* Navigation */}
+            {}
             <header className="landing-navbar">
 
                 <div
@@ -41,7 +53,7 @@ const LandingPage = ({ onGetStarted, onLogin }) => {
 
                 <button
                     className="landing-login-button"
-                    onClick={onLogin}
+                    onClick={handleLogin}
                 >
                     Sign In
                     <span>→</span>
@@ -50,7 +62,7 @@ const LandingPage = ({ onGetStarted, onLogin }) => {
             </header>
 
 
-            {/* Hero */}
+            {}
             <main className="landing-hero">
 
                 <div className="landing-eyebrow">
@@ -106,12 +118,12 @@ const LandingPage = ({ onGetStarted, onLogin }) => {
                 </p>
 
 
-                {/* Actions */}
+                {}
                 <div className="landing-actions">
 
                     <button
                         className="landing-primary-button"
-                        onClick={onGetStarted}
+                        onClick={handleGetStarted}
                     >
                         Create Your Vault
                         <span>↗</span>
@@ -119,7 +131,7 @@ const LandingPage = ({ onGetStarted, onLogin }) => {
 
                     <button
                         className="landing-secondary-button"
-                        onClick={onLogin}
+                        onClick={handleLogin}
                     >
                         Sign In
                     </button>
@@ -127,7 +139,7 @@ const LandingPage = ({ onGetStarted, onLogin }) => {
                 </div>
 
 
-                {/* Feature indicators */}
+                {}
                 <div className="landing-features">
 
                     <div className="landing-feature">
@@ -176,7 +188,7 @@ const LandingPage = ({ onGetStarted, onLogin }) => {
             </main>
 
 
-            {/* Bottom status */}
+            {}
             <footer className="landing-footer">
 
                 <div>

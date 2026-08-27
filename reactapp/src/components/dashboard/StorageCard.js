@@ -16,7 +16,7 @@ const StorageCard = ({ usedBytes = 0, totalLimitBytes = 10 * 1024 * 1024 * 1024 
         </span>
       </div>
 
-      {/* Progress Bar */}
+      {}
       <div style={{ width: '100%', height: '10px', background: 'rgba(255,255,255,0.08)', borderRadius: '5px', overflow: 'hidden', marginBottom: '8px' }}>
         <div
           style={{

@@ -6,7 +6,7 @@ const ComplianceConsole = ({ currentUser }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ text: '', type: '' });
 
-  // Retention policy state
+  
   const [docType, setDocType] = useState('CONTRACT');
   const [retentionDays, setRetentionDays] = useState('365');
   const [archivalDate, setArchivalDate] = useState('');
@@ -14,19 +14,19 @@ const ComplianceConsole = ({ currentUser }) => {
   const [requirement, setRequirement] = useState('GDPR Article 17 Compliance');
   const [policies, setPolicies] = useState([]);
 
-  // Legal hold state
+  
   const [policyId, setPolicyId] = useState('');
   const [legalCaseId, setLegalCaseId] = useState('');
   const [holdReason, setHoldReason] = useState('');
   const [holdEnabled, setHoldEnabled] = useState(true);
 
-  // Incident state
+  
   const [incidentType, setIncidentType] = useState('UNAUTHORIZED_ACCESS_ATTEMPT');
   const [severity, setSeverity] = useState('HIGH');
   const [description, setDescription] = useState('');
   const [incidents, setIncidents] = useState([]);
 
-  // Audit and status state
+  
   const [auditLogs, setAuditLogs] = useState([]);
   const [systemCompliance, setSystemCompliance] = useState('SECURE');
 
@@ -66,7 +66,7 @@ const ComplianceConsole = ({ currentUser }) => {
       setPolicies([...policies, res.data]);
       setMessage({ text: 'Retention policy defined and activated successfully!', type: 'success' });
       
-      // Reset some fields
+      
       setArchivalDate('');
       setDisposalDate('');
     } catch (err) {
@@ -181,7 +181,7 @@ const ComplianceConsole = ({ currentUser }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Overview Card */}
+      {}
       <div className="glass-card flex justify-between items-center">
         <div>
           <h2>⚖️ Governance, Compliance & Security Console</h2>
@@ -203,7 +203,7 @@ const ComplianceConsole = ({ currentUser }) => {
         </div>
       )}
 
-      {/* Tabs */}
+      {}
       <div className="flex gap-2">
         <button 
           className={`btn ${activeTab === 'policies' ? 'btn-primary' : 'btn-secondary'}`}
@@ -225,10 +225,10 @@ const ComplianceConsole = ({ currentUser }) => {
         </button>
       </div>
 
-      {/* Policies Tab */}
+      {}
       {activeTab === 'policies' && (
         <div className="grid-cols-2">
-          {/* Create policy */}
+          {}
           <div className="glass-card">
             <h3 className="mb-4">Create Retention & Lifecycle Policy</h3>
             <form onSubmit={handleCreatePolicy} className="flex flex-col gap-4">
@@ -295,7 +295,7 @@ const ComplianceConsole = ({ currentUser }) => {
             </form>
           </div>
 
-          {/* Legal Hold */}
+          {}
           <div className="glass-card">
             <h3 className="mb-4">Litigation Legal Holds</h3>
             <form onSubmit={handleApplyLegalHold} className="flex flex-col gap-4">
@@ -357,10 +357,10 @@ const ComplianceConsole = ({ currentUser }) => {
         </div>
       )}
 
-      {/* Incidents Tab */}
+      {}
       {activeTab === 'incidents' && (
         <div className="grid-cols-2">
-          {/* File Incident */}
+          {}
           <div className="glass-card">
             <h3 className="mb-4">Report Security threat or Intrusion</h3>
             <form onSubmit={handleLogIncident} className="flex flex-col gap-4">
@@ -403,7 +403,7 @@ const ComplianceConsole = ({ currentUser }) => {
             </form>
           </div>
 
-          {/* HSM Control panel */}
+          {}
           <div className="glass-card flex flex-col justify-between">
             <div>
               <h3 className="mb-4">Cryptographic HSM Administration</h3>
@@ -433,7 +433,7 @@ const ComplianceConsole = ({ currentUser }) => {
         </div>
       )}
 
-      {/* Audit Tab */}
+      {}
       {activeTab === 'audit' && (
         <div className="glass-card">
           <div className="flex justify-between items-center mb-4">

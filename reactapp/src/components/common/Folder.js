@@ -58,10 +58,7 @@ const Folder = ({
   );
 
 
-  /*
-   * Automatically open the folder
-   * when used as a page transition.
-   */
+  
   useEffect(() => {
 
     if (!autoOpen) return;

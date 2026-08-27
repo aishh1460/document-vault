@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import * as documentService from './services/documentService';
 import * as folderService from './services/folderService';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -6,7 +7,6 @@ import { ToastProvider, useToast } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 import PageLayout from './components/layout/PageLayout';
 
-// Pages
 import Dashboard from './pages/Dashboard';
 import Documents from './pages/Documents';
 import Folders from './pages/Folders';
@@ -21,61 +21,49 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import LandingPage from './pages/LandingPage';
 
-// Modals
 import UploadModal from './components/documents/UploadModal';
 import CreateFolderModal from './components/folders/CreateFolderModal';
 import DocumentPreview from './components/documents/DocumentPreview';
 import DocumentDetailsModal from './components/documents/DocumentDetailsModal';
 import ShareModal from './components/sharing/ShareModal';
 
-
 function MainApp() {
 
+  const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { success, error: toastError } = useToast();
 
-  // Landing / authentication state
+  
   const [showLanding, setShowLanding] = useState(true);
   const [authView, setAuthView] = useState('login');
   const [authAdminMode, setAuthAdminMode] = useState(false);
 
-  // Main application state
+  
   const [activePage, setActivePage] = useState('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [folders, setFolders] = useState([]);
 
-  // Refresh counter used to signal child pages to reload
+  
   const [refreshCount, setRefreshCount] = useState(0);
 
-  // Modals state
+  
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [createFolderModalOpen, setCreateFolderModalOpen] = useState(false);
   const [previewDoc, setPreviewDoc] = useState(null);
   const [detailsDoc, setDetailsDoc] = useState(null);
   const [shareDoc, setShareDoc] = useState(null);
 
-
-  // Check if current URL is a public share token link
-  // Example: /share/abc123
-  const path = window.location.pathname;
-  const isShareRoute = path.startsWith('/share/');
-  const shareToken = isShareRoute
-    ? path.split('/share/')[1]
-    : null;
-
-
-  // --------------------------------------------------
-  // Refresh
-  // --------------------------------------------------
+  
+  
+  
 
   const triggerRefresh = () => {
     setRefreshCount((c) => c + 1);
   };
 
-
-  // --------------------------------------------------
-  // Fetch folders
-  // --------------------------------------------------
+  
+  
+  
 
   const fetchFolders = async () => {
 
@@ -93,14 +81,13 @@ function MainApp() {
 
     } catch (err) {
 
-      // Non-critical
+      
       console.error('Failed to fetch folders:', err);
 
     }
   };
 
-
-  // Fetch folders whenever the authenticated user changes
+  
   useEffect(() => {
 
     if (currentUser) {
@@ -109,22 +96,15 @@ function MainApp() {
 
   }, [currentUser]);
 
-
-  // --------------------------------------------------
-  // Download document
-  // --------------------------------------------------
+  
+  
+  
 
   const handleDownload = async (doc) => {
 
     try {
 
-      /*
-       * The backend should eventually derive the authenticated
-       * user from the security context instead of trusting a
-       * requesterId supplied by the frontend.
-       *
-       * Keeping the current API contract here for now.
-       */
+      
       const requesterId = currentUser?.userId;
 
       if (!requesterId) {
@@ -178,10 +158,9 @@ function MainApp() {
     }
   };
 
-
-  // --------------------------------------------------
-  // Delete document
-  // --------------------------------------------------
+  
+  
+  
 
   const handleDelete = async (docId) => {
 
@@ -219,10 +198,9 @@ function MainApp() {
     }
   };
 
-
-  // --------------------------------------------------
-  // Toggle favorite
-  // --------------------------------------------------
+  
+  
+  
 
   const handleToggleFavorite = async (docId) => {
 
@@ -252,10 +230,9 @@ function MainApp() {
     }
   };
 
-
-  // --------------------------------------------------
-  // Global search
-  // --------------------------------------------------
+  
+  
+  
 
   const handleGlobalSearch = async (query) => {
 
@@ -268,9 +245,9 @@ function MainApp() {
 
     try {
 
-      // Navigate to documents page.
-      // Documents page handles the actual search.
+      
       setActivePage('documents');
+      navigate('/documents');
 
     } catch (e) {
 
@@ -278,34 +255,13 @@ function MainApp() {
     }
   };
 
-
-  // --------------------------------------------------
-  // Public share route
-  // --------------------------------------------------
-
-  if (isShareRoute && shareToken) {
-
-    return (
-      <PublicShare
-        token={shareToken}
-        onExit={() => {
-          window.location.pathname = '/';
-        }}
-      />
-    );
-  }
-
-
-  // --------------------------------------------------
-  // Unauthenticated user
-  // --------------------------------------------------
+  
+  
+  
 
   if (!currentUser) {
 
-    /*
-     * STEP 1
-     * Show landing page before authentication.
-     */
+    
     if (showLanding) {
 
       return (
@@ -331,11 +287,7 @@ function MainApp() {
       );
     }
 
-
-    /*
-     * STEP 2
-     * Show Login / Register after leaving landing page.
-     */
+    
     return (
       <div
         className="app-container"
@@ -364,221 +316,16 @@ function MainApp() {
     );
   }
 
-
-  // --------------------------------------------------
-  // AUTHENTICATED APPLICATION
-  // --------------------------------------------------
-
-  return (
-    <PageLayout
-
-      activePage={activePage}
-
-      setActivePage={setActivePage}
-
-      onSearch={handleGlobalSearch}
-
-      searchQuery={searchQuery}
-
-      setSearchQuery={setSearchQuery}
-
-    >
-
-      {/* -------------------------------------------- */}
-      {/* Dashboard */}
-      {/* -------------------------------------------- */}
-
-      {activePage === 'dashboard' && (
-
-        <Dashboard
-
-          setActivePage={setActivePage}
-
-          onUploadClick={() => {
-            setUploadModalOpen(true);
-          }}
-
-          onCreateFolderClick={() => {
-            setCreateFolderModalOpen(true);
-          }}
-
-          onSelectDocument={(doc) => {
-            setDetailsDoc(doc);
-          }}
-
-          onPreviewDocument={(doc) => {
-            setPreviewDoc(doc);
-          }}
-
-          onToggleFavorite={handleToggleFavorite}
-
-          onShareDocument={(doc) => {
-            setShareDoc(doc);
-          }}
-
-          onDeleteDocument={handleDelete}
-
-          onDownloadDocument={handleDownload}
-
-          refreshTrigger={refreshCount}
-
-        />
-
-      )}
-
-
-      {/* -------------------------------------------- */}
-      {/* Documents */}
-      {/* -------------------------------------------- */}
-
-      {activePage === 'documents' && (
-
-        <Documents
-
-          refreshTrigger={refreshCount}
-
-          searchQuery={searchQuery}
-
-          onUploadClick={() => {
-            setUploadModalOpen(true);
-          }}
-
-          onSelectDocument={(doc) => {
-            setDetailsDoc(doc);
-          }}
-
-          onPreviewDocument={(doc) => {
-            setPreviewDoc(doc);
-          }}
-
-          onShareDocument={(doc) => {
-            setShareDoc(doc);
-          }}
-
-          onDownloadDocument={handleDownload}
-
-        />
-
-      )}
-
-
-      {/* -------------------------------------------- */}
-      {/* Folders */}
-      {/* -------------------------------------------- */}
-
-      {activePage === 'folders' && (
-
-        <Folders
-
-          onCreateFolderClick={() => {
-            setCreateFolderModalOpen(true);
-          }}
-
-          onSelectDocument={(doc) => {
-            setDetailsDoc(doc);
-          }}
-
-          onPreviewDocument={(doc) => {
-            setPreviewDoc(doc);
-          }}
-
-          onToggleFavorite={handleToggleFavorite}
-
-          onShareDocument={(doc) => {
-            setShareDoc(doc);
-          }}
-
-          onDeleteDocument={handleDelete}
-
-          onDownloadDocument={handleDownload}
-
-        />
-
-      )}
-
-
-      {/* -------------------------------------------- */}
-      {/* Favorites */}
-      {/* -------------------------------------------- */}
-
-      {activePage === 'favorites' && (
-
-        <Favorites
-
-          onSelectDocument={(doc) => {
-            setDetailsDoc(doc);
-          }}
-
-          onPreviewDocument={(doc) => {
-            setPreviewDoc(doc);
-          }}
-
-          onShareDocument={(doc) => {
-            setShareDoc(doc);
-          }}
-
-          onDeleteDocument={handleDelete}
-
-          onDownloadDocument={handleDownload}
-
-        />
-
-      )}
-
-
-      {/* -------------------------------------------- */}
-      {/* Shared */}
-      {/* -------------------------------------------- */}
-
-      {activePage === 'shared' && (
-        <Shared />
-      )}
-
-
-      {/* -------------------------------------------- */}
-      {/* Recent */}
-      {/* -------------------------------------------- */}
-
-      {activePage === 'recent' && (
-        <Recent />
-      )}
-
-
-      {/* -------------------------------------------- */}
-      {/* Trash */}
-      {/* -------------------------------------------- */}
-
-      {activePage === 'trash' && (
-        <Trash />
-      )}
-
-
-      {/* -------------------------------------------- */}
-      {/* Reminders */}
-      {/* -------------------------------------------- */}
-
-      {activePage === 'reminders' && (
-        <Reminders />
-      )}
-
-
-      {/* -------------------------------------------- */}
-      {/* Settings */}
-      {/* -------------------------------------------- */}
-
-      {activePage === 'settings' && (
-        <Settings />
-      )}
-
-
-      {/* ============================================ */}
-      {/* MODALS */}
-      {/* ============================================ */}
-
-
-      {/* -------------------------------------------- */}
-      {/* Upload */}
-      {/* -------------------------------------------- */}
+  
+  
+  
+
+  
+  const modalLayer = (
+    <>
+      {}
+      {}
+      {}
 
       <UploadModal
 
@@ -594,10 +341,9 @@ function MainApp() {
 
       />
 
-
-      {/* -------------------------------------------- */}
-      {/* Create Folder */}
-      {/* -------------------------------------------- */}
+      {}
+      {}
+      {}
 
       <CreateFolderModal
 
@@ -617,10 +363,9 @@ function MainApp() {
 
       />
 
-
-      {/* -------------------------------------------- */}
-      {/* Document Preview */}
-      {/* -------------------------------------------- */}
+      {}
+      {}
+      {}
 
       {previewDoc && (
 
@@ -652,10 +397,9 @@ function MainApp() {
 
       )}
 
-
-      {/* -------------------------------------------- */}
-      {/* Document Details */}
-      {/* -------------------------------------------- */}
+      {}
+      {}
+      {}
 
       {detailsDoc && (
 
@@ -693,10 +437,9 @@ function MainApp() {
 
       )}
 
-
-      {/* -------------------------------------------- */}
-      {/* Share */}
-      {/* -------------------------------------------- */}
+      {}
+      {}
+      {}
 
       {shareDoc && (
 
@@ -717,36 +460,137 @@ function MainApp() {
         />
 
       )}
+    </>
+  );
 
+  return (
+    <PageLayout
+      activePage={activePage}
+      setActivePage={setActivePage}
+      onSearch={handleGlobalSearch}
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery}
+    >
+      <Routes>
+        {}
+        <Route index element={<Navigate to="/dashboard" replace />} />
+
+        {}
+        <Route
+          path="/dashboard"
+          element={
+            <Dashboard
+              setActivePage={setActivePage}
+              onUploadClick={() => setUploadModalOpen(true)}
+              onCreateFolderClick={() => setCreateFolderModalOpen(true)}
+              onSelectDocument={(doc) => setDetailsDoc(doc)}
+              onPreviewDocument={(doc) => setPreviewDoc(doc)}
+              onToggleFavorite={handleToggleFavorite}
+              onShareDocument={(doc) => setShareDoc(doc)}
+              onDeleteDocument={handleDelete}
+              onDownloadDocument={handleDownload}
+              refreshTrigger={refreshCount}
+            />
+          }
+        />
+
+        {}
+        <Route
+          path="/documents"
+          element={
+            <Documents
+              refreshTrigger={refreshCount}
+              searchQuery={searchQuery}
+              onUploadClick={() => setUploadModalOpen(true)}
+              onSelectDocument={(doc) => setDetailsDoc(doc)}
+              onPreviewDocument={(doc) => setPreviewDoc(doc)}
+              onShareDocument={(doc) => setShareDoc(doc)}
+              onDownloadDocument={handleDownload}
+            />
+          }
+        />
+
+        {}
+        <Route
+          path="/folders"
+          element={
+            <Folders
+              onCreateFolderClick={() => setCreateFolderModalOpen(true)}
+              onSelectDocument={(doc) => setDetailsDoc(doc)}
+              onPreviewDocument={(doc) => setPreviewDoc(doc)}
+              onToggleFavorite={handleToggleFavorite}
+              onShareDocument={(doc) => setShareDoc(doc)}
+              onDeleteDocument={handleDelete}
+              onDownloadDocument={handleDownload}
+            />
+          }
+        />
+
+        {}
+        <Route
+          path="/favorites"
+          element={
+            <Favorites
+              onSelectDocument={(doc) => setDetailsDoc(doc)}
+              onPreviewDocument={(doc) => setPreviewDoc(doc)}
+              onShareDocument={(doc) => setShareDoc(doc)}
+              onDeleteDocument={handleDelete}
+              onDownloadDocument={handleDownload}
+            />
+          }
+        />
+
+        {}
+        <Route path="/shared" element={<Shared />} />
+
+        {}
+        <Route path="/recent" element={<Recent />} />
+
+        {}
+        <Route path="/trash" element={<Trash />} />
+
+        {}
+        <Route path="/reminders" element={<Reminders />} />
+
+        {}
+        <Route path="/settings" element={<Settings />} />
+
+        {}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+
+      {modalLayer}
     </PageLayout>
   );
 }
-
-
-// ==================================================
-// ROOT APP
-// ==================================================
 
 function App() {
 
   return (
 
-    <ThemeProvider>
+    <BrowserRouter>
 
-      <AuthProvider>
+      <ThemeProvider>
 
-        <ToastProvider>
+        <AuthProvider>
 
-          <MainApp />
+          <ToastProvider>
 
-        </ToastProvider>
+            {}
+            <Routes>
+              <Route path="/share/:token" element={<PublicShare />} />
+              <Route path="*" element={<MainApp />} />
+            </Routes>
 
-      </AuthProvider>
+          </ToastProvider>
 
-    </ThemeProvider>
+        </AuthProvider>
+
+      </ThemeProvider>
+
+    </BrowserRouter>
 
   );
 }
-
 
 export default App;

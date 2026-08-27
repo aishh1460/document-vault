@@ -33,8 +33,6 @@ const Settings = () => {
         username: username.trim(),
         email: email.trim(),
         password: newPassword || undefined,
-        role: currentUser.role,
-        securityClearance: currentUser.securityClearance,
       });
       updateUserProfile({
         ...currentUser,
@@ -57,7 +55,7 @@ const Settings = () => {
           ⚙️ Vault Settings & Profile
         </h2>
         <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          Manage your account profile, cryptographic clearances, and interface preferences
+          Manage your account profile, security credentials, and interface preferences
         </p>
       </div>
 
@@ -112,16 +110,10 @@ const Settings = () => {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginTop: '6px' }}>
-            <div className="glass-card" style={{ padding: '10px 14px' }}>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>Role</span>
+          <div style={{ marginTop: '6px' }}>
+            <div className="glass-card" style={{ padding: '10px 14px', maxWidth: '300px' }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>Account Role</span>
               <strong style={{ fontSize: '0.9rem', color: 'var(--text-primary)' }}>{currentUser?.role}</strong>
-            </div>
-            <div className="glass-card" style={{ padding: '10px 14px' }}>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>Security Clearance</span>
-              <strong style={{ fontSize: '0.9rem', color: 'var(--text-primary)' }}>
-                {currentUser?.securityClearance || 'PUBLIC'}
-              </strong>
             </div>
           </div>
 

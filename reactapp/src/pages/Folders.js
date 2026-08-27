@@ -96,7 +96,7 @@ const Folders = ({
       setFolderDocs(
         allDocuments.filter(
           (document) =>
-            Number(document.folder?.id) ===
+            Number(document.folder?.id || document.folderId) ===
             Number(folderId)
         )
       );
@@ -113,7 +113,7 @@ const Folders = ({
   const getFolderDocumentCount = (folderId) => {
     return documents.filter(
       (document) =>
-        Number(document.folder?.id) ===
+        Number(document.folder?.id || document.folderId) ===
         Number(folderId)
     ).length;
   };

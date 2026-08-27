@@ -2,6 +2,8 @@ import apiClient from './apiClient';
 
 export const register = (registerData) => apiClient.post('/api/users/register', registerData);
 
+export const registerAdmin = (registerData) => apiClient.post('/api/admin/register', registerData);
+
 export const login = (loginData) => apiClient.post('/api/auth/login', loginData);
 
 export const adminLogin = (loginData) => apiClient.post('/api/admin/login', loginData);

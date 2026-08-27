@@ -422,7 +422,7 @@ const ComplianceConsole = ({ currentUser }) => {
 
                 <div style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px', background: 'rgba(255,255,255,0.01)' }}>
                   <h4 className="text-sm font-semibold mb-2">Access Control Audit Review</h4>
-                  <p className="text-muted text-sm mb-3">Audits and records access logs to verify that roles and security clearances are enforced.</p>
+                  <p className="text-muted text-sm mb-3">Audits and records access logs to verify that user permissions and roles are enforced.</p>
                   <button className="btn btn-secondary w-full" onClick={handleAccessReview} disabled={loading}>
                     🔍 Initiate Access Review
                   </button>

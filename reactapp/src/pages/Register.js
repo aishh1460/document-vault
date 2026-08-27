@@ -4,17 +4,16 @@ import { useToast } from '../context/ToastContext';
 import Button from '../components/common/Button';
 import './Register.css';
 
-const Register = ({ onToggleLogin, onRegisterSuccess }) => {
-  const { registerUser } = useAuth();
+const Register = ({ initialAdminMode = false, onToggleLogin, onRegisterSuccess }) => {
+  const { registerUser, registerAdmin } = useAuth();
   const { success, error: toastError } = useToast();
 
+  const [isAdminMode, setIsAdminMode] = useState(initialAdminMode);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'VIEWER',
-    securityClearance: 'PUBLIC',
   });
 
   const [errors, setErrors] = useState({});
@@ -78,20 +77,24 @@ const Register = ({ onToggleLogin, onRegisterSuccess }) => {
     setLoading(true);
 
     try {
-      await registerUser({
+      const payload = {
         username: formData.username.trim(),
         email: formData.email.trim(),
         password: formData.password,
-        role: formData.role,
-        securityClearance: formData.securityClearance,
-      });
+      };
 
-      success('Account created successfully! Please sign in.');
+      if (isAdminMode) {
+        await registerAdmin(payload);
+        success('Administrator account registered successfully! Please sign in through Admin Portal.');
+      } else {
+        await registerUser(payload);
+        success('Account created successfully! Please sign in.');
+      }
 
       if (onRegisterSuccess) {
-        onRegisterSuccess();
+        onRegisterSuccess(isAdminMode);
       } else if (onToggleLogin) {
-        onToggleLogin();
+        onToggleLogin(isAdminMode);
       }
     } catch (err) {
       const fieldErrs = err.response?.data?.fieldErrors;
@@ -101,7 +104,9 @@ const Register = ({ onToggleLogin, onRegisterSuccess }) => {
       }
 
       const msg =
-        err.response?.data?.message || 'Registration failed';
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        (isAdminMode ? 'Admin registration failed' : 'Registration failed');
 
       toastError(msg);
     } finally {
@@ -113,9 +118,7 @@ const Register = ({ onToggleLogin, onRegisterSuccess }) => {
 
   return (
     <div className="register-page">
-
       <section className="register-visual">
-
         <img
           src="/images/registerpic.jfif"
           alt="Secure document vault"
@@ -125,7 +128,6 @@ const Register = ({ onToggleLogin, onRegisterSuccess }) => {
         <div className="register-visual-overlay" />
 
         <div className="register-visual-content">
-
           <div className="register-visual-eyebrow">
             <span className="register-eyebrow-dot" />
             SECURE • PRIVATE • ORGANIZED
@@ -143,7 +145,6 @@ const Register = ({ onToggleLogin, onRegisterSuccess }) => {
           </p>
 
           <div className="register-visual-features">
-
             <div className="register-feature">
               <strong>PRIVATE</strong>
               <span>Your documents, your control</span>
@@ -153,42 +154,57 @@ const Register = ({ onToggleLogin, onRegisterSuccess }) => {
               <strong>SECURE</strong>
               <span>Built for confidential files</span>
             </div>
-
           </div>
-
         </div>
-
       </section>
 
-
       <section className="register-form-section">
-
         <div className="register-form-wrapper">
-
           <div className="register-form-header">
-
             <div className="register-logo">
-              <span>V</span>
+              <span>{isAdminMode ? '🔐' : 'V'}</span>
             </div>
 
             <h2>
-              Create Vault Account
+              {isAdminMode ? 'Create Admin Account' : 'Create Vault Account'}
             </h2>
 
             <p>
-              Register to securely ingest and store confidential documents
+              {isAdminMode
+                ? 'Register for administrative access to the Document Vault system'
+                : 'Register to securely ingest and store your confidential documents'}
             </p>
-
           </div>
 
+          {/* Registration Mode Switch */}
+          <div className="auth-tabs" style={{ marginBottom: '20px' }}>
+            <button
+              type="button"
+              className={!isAdminMode ? 'active' : ''}
+              onClick={() => {
+                setIsAdminMode(false);
+                setErrors({});
+              }}
+            >
+              <span>👤</span>
+              User Registration
+            </button>
 
-          <form
-            className="register-form"
-            onSubmit={handleSubmit}
-          >
+            <button
+              type="button"
+              className={isAdminMode ? 'active admin' : ''}
+              onClick={() => {
+                setIsAdminMode(true);
+                setErrors({});
+              }}
+            >
+              <span>🔐</span>
+              Admin Registration
+            </button>
+          </div>
 
+          <form className="register-form" onSubmit={handleSubmit}>
             <div className="register-form-group">
-
               <label>
                 Username <span>*</span>
               </label>
@@ -207,12 +223,9 @@ const Register = ({ onToggleLogin, onRegisterSuccess }) => {
                   {errors.username}
                 </span>
               )}
-
             </div>
 
-
             <div className="register-form-group">
-
               <label>
                 Email Address <span>*</span>
               </label>
@@ -231,14 +244,10 @@ const Register = ({ onToggleLogin, onRegisterSuccess }) => {
                   {errors.email}
                 </span>
               )}
-
             </div>
 
-
             <div className="register-two-column">
-
               <div className="register-form-group">
-
                 <label>
                   Password <span>*</span>
                 </label>
@@ -251,12 +260,9 @@ const Register = ({ onToggleLogin, onRegisterSuccess }) => {
                   value={formData.password}
                   onChange={handleChange}
                 />
-
               </div>
 
-
               <div className="register-form-group">
-
                 <label>
                   Confirm Password <span>*</span>
                 </label>
@@ -269,11 +275,8 @@ const Register = ({ onToggleLogin, onRegisterSuccess }) => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                 />
-
               </div>
-
             </div>
-
 
             <div
               className={`register-password-status ${
@@ -289,7 +292,6 @@ const Register = ({ onToggleLogin, onRegisterSuccess }) => {
               </span>
             </div>
 
-
             {errors.password && (
               <span className="register-error register-password-error">
                 {errors.password}
@@ -302,84 +304,9 @@ const Register = ({ onToggleLogin, onRegisterSuccess }) => {
               </span>
             )}
 
-
-            <div className="register-two-column">
-
-              <div className="register-form-group">
-
-                <label>
-                  Security Role
-                </label>
-
-                <select
-                  name="role"
-                  className="register-input register-select"
-                  value={formData.role}
-                  onChange={handleChange}
-                >
-                  <option value="VIEWER">
-                    VIEWER
-                  </option>
-
-                  <option value="COLLABORATOR">
-                    COLLABORATOR
-                  </option>
-
-                  <option value="MANAGER">
-                    MANAGER
-                  </option>
-
-                  <option value="VAULT_OWNER">
-                    VAULT_OWNER
-                  </option>
-
-                  <option value="ADMIN">
-                    ADMIN
-                  </option>
-
-                </select>
-
-              </div>
-
-
-              <div className="register-form-group">
-
-                <label>
-                  Clearance Level
-                </label>
-
-                <select
-                  name="securityClearance"
-                  className="register-input register-select"
-                  value={formData.securityClearance}
-                  onChange={handleChange}
-                >
-                  <option value="PUBLIC">
-                    PUBLIC
-                  </option>
-
-                  <option value="CONFIDENTIAL">
-                    CONFIDENTIAL
-                  </option>
-
-                  <option value="SECRET">
-                    SECRET
-                  </option>
-
-                  <option value="TOP_SECRET">
-                    TOP_SECRET
-                  </option>
-
-                </select>
-
-              </div>
-
-            </div>
-
-
             <Button
               type="submit"
-              variant="primary"
+              variant={isAdminMode ? 'danger' : 'primary'}
               loading={loading}
               style={{
                 width: '100%',
@@ -387,50 +314,41 @@ const Register = ({ onToggleLogin, onRegisterSuccess }) => {
                 marginTop: '8px',
               }}
             >
-              Create Account
+              {isAdminMode ? 'Create Administrator Account' : 'Create Account'}
             </Button>
-
 
             {onToggleLogin && (
               <div className="register-login-link">
-
                 Already registered?
-
                 <button
                   type="button"
-                  onClick={onToggleLogin}
+                  onClick={() => onToggleLogin(isAdminMode)}
                 >
                   Sign In Here
                 </button>
-
               </div>
             )}
-
           </form>
 
-
           <div className="register-security-note">
-
             <div className="security-note-icon">
               ◈
             </div>
 
             <div>
               <strong>
-                Private & Secure
+                {isAdminMode ? 'Admin Security Policy' : 'Private & Secure'}
               </strong>
 
               <span>
-                Your documents remain protected inside your personal vault.
+                {isAdminMode
+                  ? 'Administrator accounts are assigned strictly with elevated vault permissions.'
+                  : 'Your documents remain protected inside your personal vault.'}
               </span>
             </div>
-
           </div>
-
         </div>
-
       </section>
-
     </div>
   );
 };

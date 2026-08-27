@@ -37,11 +37,10 @@ export const Login = ({ onLoginSuccess, onToggleRegister }) => {
         role: data.role,
       }));
 
-      // Fetch user profile to get security clearance level
+      // Fetch user profile
       const profileRes = await authService.getProfile(data.userId);
       const fullUser = {
         ...data,
-        securityClearance: profileRes.data.securityClearance,
         mfaEnabled: profileRes.data.mfaEnabled,
         email: profileRes.data.email
       };
@@ -142,8 +141,6 @@ export const Register = ({ onRegisterSuccess, onToggleLogin }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('VIEWER');
-  const [securityClearance, setSecurityClearance] = useState('PUBLIC');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -196,7 +193,7 @@ export const Register = ({ onRegisterSuccess, onToggleLogin }) => {
     setLoading(true);
 
     try {
-      const payload = { username: username.trim(), email: email.trim(), password, role, securityClearance };
+      const payload = { username: username.trim(), email: email.trim(), password };
       await authService.register(payload);
       setSuccess(true);
       setTimeout(() => {
@@ -269,37 +266,6 @@ export const Register = ({ onRegisterSuccess, onToggleLogin }) => {
             required
             placeholder="At least 8 characters"
           />
-        </div>
-
-        <div className="grid-cols-2">
-          <div className="form-group">
-            <label className="form-label">Administrative Role</label>
-            <select
-              className="form-input"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-            >
-              <option value="VIEWER">VIEWER</option>
-              <option value="EDITOR">EDITOR</option>
-              <option value="ADMIN">ADMIN</option>
-              <option value="COMPLIANCE_OFFICER">COMPLIANCE_OFFICER</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Security Clearance</label>
-            <select
-              className="form-input"
-              value={securityClearance}
-              onChange={(e) => setSecurityClearance(e.target.value)}
-            >
-              <option value="PUBLIC">PUBLIC</option>
-              <option value="INTERNAL">INTERNAL</option>
-              <option value="CONFIDENTIAL">CONFIDENTIAL</option>
-              <option value="RESTRICTED">RESTRICTED</option>
-              <option value="TOP_SECRET">TOP_SECRET</option>
-            </select>
-          </div>
         </div>
 
         <button type="submit" className="btn btn-primary w-full mt-2" disabled={loading || success}>

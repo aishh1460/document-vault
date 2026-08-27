@@ -281,7 +281,7 @@ const Navbar = ({ onSearch, searchQuery, setSearchQuery, activePage, setActivePa
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{currentUser.username}</span>
                 <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>
-                  {currentUser.role} • {currentUser.securityClearance || 'PUBLIC'}
+                  {currentUser.role}
                 </span>
               </div>
             </div>

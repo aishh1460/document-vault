@@ -1,9 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import './FoldText.css';
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== 'undefined') {
+    try {
+        gsap.registerPlugin(ScrollTrigger);
+    } catch (e) {}
+}
 
 const FoldText = ({
     text = '',

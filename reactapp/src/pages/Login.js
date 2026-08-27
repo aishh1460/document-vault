@@ -4,11 +4,11 @@ import { useToast } from '../context/ToastContext';
 import Button from '../components/common/Button';
 import './Login.css';
 
-const Login = ({ onToggleRegister }) => {
+const Login = ({ initialAdminMode = false, onToggleRegister }) => {
   const { loginUser, loginAdmin } = useAuth();
   const { success, error: toastError } = useToast();
 
-  const [isAdminMode, setIsAdminMode] = useState(false);
+  const [isAdminMode, setIsAdminMode] = useState(initialAdminMode);
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -313,24 +313,18 @@ const Login = ({ onToggleRegister }) => {
 
 
               {/* Register */}
-
-              {!isAdminMode && onToggleRegister && (
-
+              {onToggleRegister && (
                 <div className="auth-register">
-
                   <span>
-                    Don't have an account?
+                    {isAdminMode ? 'Need an admin account?' : "Don't have an account?"}
                   </span>
-
                   <button
                     type="button"
-                    onClick={onToggleRegister}
+                    onClick={() => onToggleRegister(isAdminMode)}
                   >
-                    Create your vault
+                    {isAdminMode ? 'Register as Admin' : 'Create your vault'}
                   </button>
-
                 </div>
-
               )}
 
             </form>

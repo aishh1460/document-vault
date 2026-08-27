@@ -55,7 +55,7 @@ const DocumentList = ({ documents = [], onDelete, onSelectDocument, onManageAcce
 
       {documents.length === 0 ? (
         <div className="text-center p-8 text-muted">
-          No documents found matching security clearance/classification.
+          No documents found.
         </div>
       ) : (
         <div className="table-container">

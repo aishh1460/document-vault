@@ -37,6 +37,7 @@ function MainApp() {
   // Landing / authentication state
   const [showLanding, setShowLanding] = useState(true);
   const [authView, setAuthView] = useState('login');
+  const [authAdminMode, setAuthAdminMode] = useState(false);
 
   // Main application state
   const [activePage, setActivePage] = useState('dashboard');
@@ -342,21 +343,21 @@ function MainApp() {
       >
 
         {authView === 'login' ? (
-
           <Login
-            onToggleRegister={() => {
+            initialAdminMode={authAdminMode}
+            onToggleRegister={(isAdmin) => {
+              setAuthAdminMode(Boolean(isAdmin));
               setAuthView('register');
             }}
           />
-
         ) : (
-
           <Register
-            onToggleLogin={() => {
+            initialAdminMode={authAdminMode}
+            onToggleLogin={(isAdmin) => {
+              setAuthAdminMode(Boolean(isAdmin));
               setAuthView('login');
             }}
           />
-
         )}
 
       </div>

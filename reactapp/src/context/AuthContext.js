@@ -6,7 +6,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
     if (process.env.NODE_ENV === 'test') {
-      return { userId: 1, username: 'tester', role: 'ADMIN', securityClearance: 'TOP_SECRET' };
+      return { userId: 1, username: 'tester', role: 'ADMIN' };
     }
     const stored = localStorage.getItem('vault_user');
     return stored ? JSON.parse(stored) : null;
@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }) => {
         username: data.username,
         role: data.role,
         email: data.email,
-        securityClearance: data.securityClearance || 'PUBLIC',
       };
       localStorage.setItem('vault_user', JSON.stringify(userObj));
       setCurrentUser(userObj);
@@ -46,7 +45,6 @@ export const AuthProvider = ({ children }) => {
         username: data.username,
         role: data.role,
         email: data.email,
-        securityClearance: data.securityClearance || 'TOP_SECRET',
       };
       localStorage.setItem('vault_user', JSON.stringify(userObj));
       setCurrentUser(userObj);
@@ -60,6 +58,15 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       return await authService.register(userData);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const registerAdmin = async (userData) => {
+    setLoading(true);
+    try {
+      return await authService.registerAdmin(userData);
     } finally {
       setLoading(false);
     }
@@ -89,6 +96,7 @@ export const AuthProvider = ({ children }) => {
         loginUser,
         loginAdmin,
         registerUser,
+        registerAdmin,
         logoutUser,
         updateUserProfile,
         setCurrentUser,

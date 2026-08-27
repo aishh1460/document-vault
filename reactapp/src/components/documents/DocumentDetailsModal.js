@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
 import Button from '../common/Button';
 import Badge from '../common/Badge';
@@ -16,9 +16,16 @@ const DocumentDetailsModal = ({
 }) => {
   const { success, error: toastError } = useToast();
   const [newVersionFile, setNewVersionFile] = useState(null);
-  const [selectedFolderId, setSelectedFolderId] = useState(doc?.folder?.id || '');
+  const [selectedFolderId, setSelectedFolderId] = useState(doc?.folder?.id || doc?.folderId || '');
   const [renaming, setRenaming] = useState(false);
   const [newName, setNewName] = useState(doc?.documentTitle || doc?.originalFileName || '');
+
+  useEffect(() => {
+    if (doc) {
+      setSelectedFolderId(doc.folder?.id || doc.folderId || '');
+      setNewName(doc.documentTitle || doc.originalFileName || doc.fileName || '');
+    }
+  }, [doc]);
 
   if (!doc) return null;
 
@@ -141,7 +148,7 @@ const DocumentDetailsModal = ({
           <div className="glass-card" style={{ padding: '12px', fontSize: '0.85rem' }}>
             <h5 style={{ margin: '0 0 8px 0', color: 'var(--primary-color)' }}>🛡️ Vault Governance</h5>
             <p style={{ margin: '4px 0' }}><strong>Status:</strong> <Badge variant="success">{doc.status || 'ACTIVE'}</Badge></p>
-            <p style={{ margin: '4px 0' }}><strong>Classification:</strong> <Badge variant="primary">{doc.securityClassification || 'PUBLIC'}</Badge></p>
+            <p style={{ margin: '4px 0' }}><strong>Category:</strong> <Badge variant="primary">{doc.category || doc.documentCategory || 'OTHER'}</Badge></p>
             <p style={{ margin: '4px 0' }}><strong>Created:</strong> {new Date(doc.createdAt || Date.now()).toLocaleString()}</p>
             <p style={{ margin: '4px 0' }}><strong>Digital Signature:</strong> Verified</p>
           </div>
